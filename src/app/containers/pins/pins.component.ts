@@ -77,11 +77,18 @@ export class PinsComponent implements OnInit {
       for (let pin of this.pins) {
         if (pin.Pin === pinNo) {
           if (pin.Status) {
-            this.naas.pinOff(pin.Pin).subscribe();
+            this.naas.pinOff(pin.Pin).subscribe((result: string) => {
+              pin.Status = false
+              this.emitPins(this.pins);
+            });
+            
             // this.naas.pinOff(pin.Pin).subscribe(this.handlePinsState);
             break;
           } else {
-            this.naas.pinOn(pin.Pin).subscribe();
+            this.naas.pinOn(pin.Pin).subscribe((result: string) => {
+              pin.Status = true;
+              this.emitPins(this.pins);
+            });
             // this.naas.pinOn(pin.Pin).subscribe(this.handlePinsState);
             break;
           }
@@ -90,7 +97,9 @@ export class PinsComponent implements OnInit {
     } 
     
   }
-  
+  emitPins(pins: Pin[]) {
+    this.pinsState$.next(pins); 
+  }
   handlePinsState(pinsState: string) {
     if (pinsState) {
       console.log("handlePinsState");
@@ -98,7 +107,7 @@ export class PinsComponent implements OnInit {
       let pins: Pin[] = [];
       
       // push to pinsState$
-      this.pinsState$.next(pins); 
+      this.emitPins(pins);
     }
   }
   
