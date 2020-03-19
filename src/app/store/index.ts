@@ -26,6 +26,7 @@ import { storeFreeze } from 'ngrx-store-freeze';
 import * as fromPlant from './plant/plant.reducer';
 import * as fromDevice from './device/device.reducer';
 import * as fromField from './field/field.reducer';
+import * as fromController from './controller/controller.reducer';
 
 /**
  * As mentioned, we treat each reducer like a table in a database. This means
@@ -35,6 +36,7 @@ export interface State {
   plant: fromPlant.State;
   device: fromDevice.State;
   field: fromField.State;
+  controller: fromController.State;
   routerReducer: fromRouter.RouterReducerState<RouterStateUrl>;
 }
 
@@ -47,6 +49,7 @@ export const reducers: ActionReducerMap<State> = {
   plant: fromPlant.reducer,
   device: fromDevice.reducer,
   field: fromField.reducer,
+  controller: fromController.reducer,
   routerReducer: fromRouter.routerReducer,
 };
 
@@ -71,3 +74,4 @@ export const metaReducers: MetaReducer<State>[] = !environment.production
 export const getFieldState = (state: State) => state.field;
 export const getPlantState = (state: State) => state.plant;
 export const getDeviceState = (state: State) => state.device;
+export const getControllerState = (state: State) => state.controller;

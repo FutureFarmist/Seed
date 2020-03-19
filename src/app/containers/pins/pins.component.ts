@@ -1,114 +1,164 @@
-import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { NaasService } from '../../services/naas.service';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-
-interface Pin {
-  Pin: number
-  Status: boolean
-}
+import {
+  Component,
+  OnInit
+} from '@angular/core';
+import {
+  BehaviorSubject,
+  Observable,
+  Subscription
+} from 'rxjs';
+import {
+  NaasService
+} from '../../services/naas.service';
+import {
+  MatSlideToggleChange
+} from '@angular/material/slide-toggle';
+import {
+  IDevice, DEVICE_LIST
+} from '../../models';
 
 @Component({
   selector: 'pins',
   template: `
-  <div *ngFor="let pin of pinsState$ | async" >
-    <mat-slide-toggle
-    (change)="togglePin(pin.Pin)"
-    [checked]="pin.Status">{{pin.Pin}}</mat-slide-toggle>
-  </div>
+    <button (click)="readDevices()" matInput>read devices</button>
+    <mat-grid-list cols="5" rowHeight="200px">
+      <mat-grid-tile *ngFor="let pin of devicesState$ | async">
+        <mat-card class="card">
+          <mat-card-header>
+            <div mat-card-avatar class="header-image"></div>
+            <mat-card-title>{{
+              pin.Name ? pin.Name : 'PIN ' + pin.Pin
+            }}</mat-card-title>
+            <mat-card-subtitle>{{getDeviceName(pin.DeviceId)}}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            content
+          </mat-card-content>
+          <mat-card-actions>
+            <mat-slide-toggle
+              *ngIf="pin.PinMode == 1"
+              (change)="togglePin(pin.Pin)"
+              [checked]="pin.OutputActive"
+              >Output</mat-slide-toggle
+            >
+          </mat-card-actions>
+        </mat-card>
+      </mat-grid-tile>
+    </mat-grid-list>
   `,
   styleUrls: ['./pins.component.scss']
 })
 export class PinsComponent implements OnInit {
-
-  pins: Array<Pin> = [];
-  pinsState$: BehaviorSubject<Array<Pin>> = new BehaviorSubject<Array<Pin>>([]);
-  
-  constructor(private naas: NaasService) { }
+  devices: Array<IDevice> = [];
+  devicesState$: BehaviorSubject<Array<IDevice>> = new BehaviorSubject<
+    Array<IDevice>
+  >([]);
+  devices$$: Subscription;
+  deviceList = DEVICE_LIST;
+  constructor(private naasSv: NaasService) {}
 
   ngOnInit() {
-    this.pins.push({Pin: 1, Status: false});
-    this.pins.push({Pin: 2, Status: false});
-    this.pins.push({Pin: 3, Status: false});
-    this.pins.push({Pin: 4, Status: false});
-    this.pins.push({Pin: 5, Status: false});
-    // this.pins.push({Pin: 6, Status: false}); 
-    this.pins.push({Pin: 7, Status: false});
-    this.pins.push({Pin: 8, Status: false});
-    // this.pins.push({Pin: 9, Status: false});
-    this.pins.push({Pin: 10, Status: false});
-    this.pins.push({Pin: 11, Status: false});
-    this.pins.push({Pin: 12, Status: false});
-    this.pins.push({Pin: 13, Status: false});
-    // this.pins.push({Pin: 14, Status: false}); 
-    this.pins.push({Pin: 15, Status: false});
-    this.pins.push({Pin: 16, Status: false});
-    this.pins.push({Pin: 17, Status: false});
-    this.pins.push({Pin: 18, Status: false});
-    this.pins.push({Pin: 19, Status: false});
-    // this.pins.push({Pin: 20, Status: false});
-    this.pins.push({Pin: 21, Status: false});
-    this.pins.push({Pin: 22, Status: false});
-    this.pins.push({Pin: 23, Status: false});
-    this.pins.push({Pin: 24, Status: false});
-    // this.pins.push({Pin: 25, Status: false});
-    this.pins.push({Pin: 26, Status: false});
-    this.pins.push({Pin: 27, Status: false});
-    this.pins.push({Pin: 28, Status: false});
-    this.pins.push({Pin: 29, Status: false});
-    // this.pins.push({Pin: 30, Status: false});
-    this.pins.push({Pin: 31, Status: false});
-    this.pins.push({Pin: 32, Status: false});
-    this.pins.push({Pin: 33, Status: false});
-    // this.pins.push({Pin: 34, Status: false});
-    this.pins.push({Pin: 35, Status: false});
-    this.pins.push({Pin: 36, Status: false});
-    this.pins.push({Pin: 37, Status: false});
-    this.pins.push({Pin: 38, Status: false});
-    // this.pins.push({Pin: 39, Status: false});
-    this.pins.push({Pin: 40, Status: false});
-    this.pinsState$.next(this.pins);
-    console.log('pin');
-  }
+    this.devices = [];
+    // this.devices = [
+    //   { Pin: 1, Status: false, PinType: 0, Name: 'Sensor X' },
+    //   { Pin: 2, Status: false, PinType: 0 },
+    //   { Pin: 3, Status: false, PinType: 0 },
+    //   { Pin: 4, Status: false, PinType: 0 },
+    //   { Pin: 5, Status: false, PinType: 0 },
+    //   { Pin: 6, Status: false, PinType: 1 }, // ground
+    //   { Pin: 7, Status: false, PinType: 0 },
+    //   { Pin: 8, Status: false, PinType: 0 },
+    //   { Pin: 9, Status: false, PinType: 1 }, // ground
+    //   { Pin: 10, Status: false, PinType: 0 },
+    //   { Pin: 11, Status: false, PinType: 0 },
+    //   { Pin: 12, Status: false, PinType: 0 },
+    //   { Pin: 13, Status: false, PinType: 0 },
+    //   { Pin: 14, Status: false, PinType: 0 }, // ground
+    //   { Pin: 15, Status: false, PinType: 0 },
+    //   { Pin: 16, Status: false, PinType: 0 },
+    //   { Pin: 17, Status: false, PinType: 0 },
+    //   { Pin: 18, Status: false, PinType: 0 },
+    //   { Pin: 19, Status: false, PinType: 0 },
+    //   { Pin: 20, Status: false, PinType: 1 }, // ground
+    //   { Pin: 21, Status: false, PinType: 0 },
+    //   { Pin: 22, Status: false, PinType: 0 },
+    //   { Pin: 23, Status: false, PinType: 0 },
+    //   { Pin: 24, Status: false, PinType: 0 },
+    //   { Pin: 25, Status: false, PinType: 1 }, // ground
+    //   { Pin: 26, Status: false, PinType: 0 },
+    //   { Pin: 27, Status: false, PinType: 0 },
+    //   { Pin: 28, Status: false, PinType: 0 },
+    //   { Pin: 29, Status: false, PinType: 0 },
+    //   { Pin: 30, Status: false, PinType: 1 }, // ground
+    //   { Pin: 31, Status: false, PinType: 0 },
+    //   { Pin: 32, Status: false, PinType: 0 },
+    //   { Pin: 33, Status: false, PinType: 0 },
+    //   { Pin: 34, Status: false, PinType: 1 }, // ground
+    //   { Pin: 35, Status: false, PinType: 0 },
+    //   { Pin: 36, Status: false, PinType: 0 },
+    //   { Pin: 37, Status: false, PinType: 0 },
+    //   { Pin: 38, Status: false, PinType: 0 },
+    //   { Pin: 39, Status: false, PinType: 1 }, // ground
+    //   { Pin: 40, Status: false, PinType: 0 }
+    // ];
 
+    this.devicesState$.next(this.devices);
+    console.log('pin');
+
+    this.devices$$ = this.naasSv.readDevices().subscribe(devices => {
+      // let devices = ;
+      this.devicesState$.next(JSON.parse(devices).filter(val => val.DeviceId));
+    });
+  }
+  readDevices() {}
   togglePin(pinNo: number) {
-    
     if (pinNo > 0) {
-      for (let pin of this.pins) {
+      for (let pin of this.devices) {
         if (pin.Pin === pinNo) {
-          if (pin.Status) {
-            this.naas.pinOff(pin.Pin).subscribe((result: string) => {
-              pin.Status = false
-              this.emitPins(this.pins);
+          if (pin.BoolState) {
+            this.naasSv.pinOff(pin.Pin).subscribe((result: string) => {
+              pin.BoolState = false;
+              this.emitdevices(this.devices);
             });
-            
-            // this.naas.pinOff(pin.Pin).subscribe(this.handlePinsState);
+
+            // this.naasSv.pinOff(pin.Pin).subscribe(this.handledevicesState);
             break;
           } else {
-            this.naas.pinOn(pin.Pin).subscribe((result: string) => {
-              pin.Status = true;
-              this.emitPins(this.pins);
+            this.naasSv.pinOn(pin.Pin).subscribe((result: string) => {
+              pin.BoolState = true;
+              this.emitdevices(this.devices);
             });
-            // this.naas.pinOn(pin.Pin).subscribe(this.handlePinsState);
+            // this.naasSv.pinOn(pin.Pin).subscribe(this.handledevicesState);
             break;
           }
         }
       }
-    } 
-    
-  }
-  emitPins(pins: Pin[]) {
-    this.pinsState$.next(pins); 
-  }
-  handlePinsState(pinsState: string) {
-    if (pinsState) {
-      console.log("handlePinsState");
-      let ps = JSON.parse(pinsState);
-      let pins: Pin[] = [];
-      
-      // push to pinsState$
-      this.emitPins(pins);
     }
   }
-  
+
+  emitdevices(devices: IDevice[]) {
+    this.devicesState$.next(devices);
+  }
+
+  handleDevicesState(devicesState: string) {
+    if (devicesState) {
+      console.log('handledevicesState');
+      let ps = JSON.parse(devicesState);
+      let devices: IDevice[] = [];
+
+      // push to devicesState$
+      this.emitdevices(devices);
+    }
+  }
+
+  getDeviceName(deviceId: string): string {
+    let name = this.deviceList.find(val => {
+      return val.DeviceId == deviceId;
+    }).Name;
+    if (name) {
+      return name;
+    } else {
+      return 'Device';
+    }
+  }
 }

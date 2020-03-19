@@ -6,7 +6,7 @@ import { AppComponent } from './../app.component';
 
 const routes: Routes = [
   { path: '', component: AppComponent },
-  { path: 'abc', component: AppComponent },
+  // { path: 'abc', component: AppComponent },
   // { path: '**', component: PageNotFoundComponent }
 ];
 

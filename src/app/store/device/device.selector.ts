@@ -1,13 +1,13 @@
-/*import { createSelector, createFeatureSelector } from '@ngrx/store';
+import { createSelector, createFeatureSelector } from '@ngrx/store';
 
 // from Feature
-import * as fromDeskIndex from './../index';
-import * as fromSyntax from './syntax.reducer';
+import * as fromIndex from './../index';
+import * as fromDevice from './device.reducer';
 
-export const getSyntaxState = createSelector(
+/* export const getSyntaxState = createSelector(
   fromDeskIndex.getDeskState,
   (state: fromDeskIndex.DeskState) => state.syntax
-);
+); */
 
 // export const getSyntaxEntitiesState = createSelector(
 //   fromDeskIndex.getDeskState,
@@ -16,17 +16,17 @@ export const getSyntaxState = createSelector(
 
 export const {
   // select the array of ids
-  selectIds: getDeskIds,
+  selectIds: getDeviceIds,
 
   // select the dictionary of entities
-  selectEntities: getDeskEntities,
+  selectEntities: getDeviceEntities,
 
   // select the array of the entity
-  selectAll: getAllDesks,
+  selectAll: getAllDevices,
 
   // select the total count
-  selectTotal: getDeskTotal
-} = fromSyntax.adapter.getSelectors(getSyntaxState);*/
+  selectTotal: getDeviceTotal
+} = fromDevice.adapter.getSelectors(); // fromIndex.getDeviceState
 
 /* 
 export const getXState = createSelector(

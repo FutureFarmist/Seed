@@ -4,10 +4,10 @@ import { Observable } from 'rxjs';
 
 import { DeviceActionTypes, DeviceActions } from './device.action';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
-import { IDevice } from '../../model';
+import { IDevice } from '../../models';
 
 export interface State extends EntityState<IDevice> {
-    y: null;
+    // y: null;
 }
 
 export const adapter: EntityAdapter<IDevice> = createEntityAdapter<IDevice>({
@@ -16,7 +16,7 @@ export const adapter: EntityAdapter<IDevice> = createEntityAdapter<IDevice>({
 });
 
 export const initialState: State = adapter.getInitialState({
-    y: null
+    // y: null
 });
 
 /* export interface State {
@@ -43,4 +43,4 @@ export function reducer(
     }
 }
 
-export const getY = (state: State) => state.y;
+// export const getY = (state: State) => state.y;

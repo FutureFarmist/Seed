@@ -3,27 +3,29 @@ import { Action, ActionReducer } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
 import { PlantActionTypes, PlantActions } from './plant.action';
+import { IPlant } from '../../models';
+import { EntityState, createEntityAdapter, EntityAdapter } from '@ngrx/entity';
 
-/* export interface State extends EntityState<IDesk> {
-    StarterResource: IResource | null;
+export interface State extends EntityState<IPlant> {
+    // StarterResource: IResource | null;
 }
 
-export const adapter: EntityAdapter<IDesk> = createEntityAdapter<IDesk>({
-    selectId: (desk: IDesk) => desk.Id,
+export const adapter: EntityAdapter<IPlant> = createEntityAdapter<IPlant>({
+  selectId: (plant: IPlant) => plant.Id,
     sortComparer: false,
 });
 
 export const initialState: State = adapter.getInitialState({
-    StarterResource: null,
-}); */
+    // StarterResource: null,
+});
 
-export interface State {
+/* export interface State {
     y: boolean;
 }
 
 const initialState: State = {
     y: true,
-};
+}; */
 
 export function reducer(
     state: State = initialState,
@@ -33,7 +35,7 @@ export function reducer(
         case PlantActionTypes.Y:
             return {
                 ...state,
-                y: true,
+                // y: true,
             };
 
         default:
@@ -41,4 +43,4 @@ export function reducer(
     }
 }
 
-export const getY = (state: State) => state.y;
+// export const getY = (state: State) => state.y;

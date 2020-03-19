@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IField, IPlant, IDevice } from '../../model';
+import { IField, IPlant, IDevice } from '../../models';
 import { Observable } from 'rxjs/internal/Observable';
 import { Store } from '@ngrx/store';
 
@@ -32,7 +32,7 @@ import { NaasService } from '../../services/naas.service';
 })
 export class FieldComponent implements OnInit {
   
-  fields: Observable<IField[]> = this.naas.getFields();
+  // fields: Observable<IField[]> = this.naas.getFields();
   devices: Observable<IDevice[]> = this.naas.readDevices();
   plants: Observable<IPlant[]>;
   

@@ -1,14 +1,14 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
 
 // from Feature
-import * as fromRoot from './../index';
-import * as fromField from './field.reducer';
+import * as fromIndex from './../index';
+import * as fromController from './controller.reducer';
 
-/* export const getFieldState = createSelector(
-  fromRoot.getFieldState,
-  (state: fromRoot.State) => state.field
-); */
-
+/* export const getSyntaxState = createSelector(
+  fromIndex.getControllerState,
+  (state: fromController.State) => state.controller
+);
+ */
 // export const getSyntaxEntitiesState = createSelector(
 //   fromDeskIndex.getDeskState,
 //   state => state.syntax
@@ -16,17 +16,19 @@ import * as fromField from './field.reducer';
 
 export const {
   // select the array of ids
-  selectIds: getFieldIds,
+  selectIds: getControllerIds,
 
   // select the dictionary of entities
-  selectEntities: getFieldEntities,
+  selectEntities: getControllerEntities,
 
   // select the array of the entity
-  selectAll: getAllFields,
+  selectAll: getAllControllers,
 
   // select the total count
-  selectTotal: getFieldTotal
-} = fromField.adapter.getSelectors(); // fromRoot.getFieldState
+  selectTotal: getControllerTotal
+} = fromController.adapter.getSelectors(); // fromIndex.getControllerState
+
+
 
 /* 
 export const getXState = createSelector(

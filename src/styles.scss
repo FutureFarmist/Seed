@@ -6,3 +6,21 @@ html,body {
   margin:0;
   background: #fff;
 }
+
+.card {
+  max-width: 400px;
+  display:inline-block;
+}
+
+.header-image {
+  background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+  background-size: cover;
+}
+
+.padding20 {
+  padding: 20px;
+}
+
+.marginAuto {
+  margin: auto;
+}

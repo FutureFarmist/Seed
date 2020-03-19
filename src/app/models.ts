@@ -1,0 +1,157 @@
+
+export interface IDevice {
+  Id?: string;
+  
+  /* Device Id  */
+  DeviceId?: string;
+  Name?: string;
+  Desc?: string;
+  
+  Pin?: number;
+  
+  Status?: number;
+  
+
+  /* Pin type
+    GPIO = 0, default
+    Ground = 1
+  */
+  PinType?: number;
+
+  /* Pin mode 
+    Input = 0, default
+    Output = 1
+  */
+  PinMode?: number;
+
+  /* Active status 
+  Active?: boolean;*/
+
+  /* Factor identifier */
+  Factor?: string;
+  
+  FactorManipulator?: string;
+  
+  /* Unit of measurement */
+  Unit?: string;
+  
+  /* Current active status for actuator device, output mode
+  and also boolean state of sensor device, input mode */
+  BoolState?: boolean;
+  
+  /* latest values attached to device_id */
+  Value1?: number;
+  Value2?: number;
+  Value3?: number;
+  
+}
+
+export interface IPlant {
+  Id: string;
+  
+}
+
+export interface IField {
+  Id: string;
+}
+
+export interface DeviceInfo {
+  DeviceId: string;  
+  Name: string;  
+  
+  PinType: number;
+  PinMode: number;
+  
+  ControlScheme?: number;
+}
+
+export const DEVICE_LIST: Array<DeviceInfo> = [
+  {
+    DeviceId: 'relay-pin',
+    Name: 'Relay Pin',
+    PinMode: 1,
+    PinType: 0,
+    ControlScheme: 0,
+    
+  },
+  {
+    DeviceId: 'humi-temp-sensor',
+    Name: 'Humi-temp sensor',
+    PinMode: 0,
+    PinType: 0,
+    ControlScheme: 0,
+  },
+  {
+    DeviceId: 'humi-sensor',
+    Name: 'Humidity sensor',
+    PinMode: 0,
+    PinType: 0,
+    ControlScheme: 0,
+  }
+];
+  
+/* To set auto setting working with devices */
+export interface Controller {
+  Id?: number;
+  Name?: string;
+  Desc?: string;
+
+  Active?: Boolean;
+
+  Sensors?: string;
+  // DeviceLinks?: Array<DeviceLink>;
+
+  Policy?: number;
+
+  ControlScheme?: number;
+
+  // TIME_POLICY + TIME_VALUE_POLICY
+
+  // cron code
+  Cron?: Cron | null;
+
+  // ActiveDaily?: Boolean;
+  // ActiveWeekDayRanges?: string[];
+  // ActiveMonthDayRanges?: string[];
+  // ActiveMonthRanges?: string[];
+  // TimePeriods?: string[];
+
+  // SessionStartDate?: string;
+  // SeasonEndDate?: string;
+
+  // VALUE_CONTROL scheme
+
+  OptimalVal?: number;
+  PreferredMin?: number;
+  PreferredMax?: number;
+
+  IncreasingDevices?: string[];
+  DecreasingDevices?: string[];
+
+  // BOOLEAN_CONTROL scheme
+  PreferredState?: Boolean;
+
+  BoolTrueDevices?: string[];
+  BoolFalseDevices?: string[];
+}
+
+export interface Cron {
+  Second?: string;
+  Minute?: string;
+  Hour?: string;
+  Dom?: string;
+  Month?: string;
+  Dow?: string;
+  Year?: string;
+}
+
+export const DEVICE_INACTIVE = 0;
+export const DEVICE_ACTIVE = 1;
+export const DEVICE_ERROR = 2;
+
+export const TIME_POLICY = 0;
+export const TIME_VALUE_POLICY = 2;
+export const VALUE_POLICY = 1;
+
+export const VALUE_CONTROL = 0;
+export const BOOLEAN_CONTROL = 1;

@@ -4,7 +4,7 @@ import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { Observable } from 'rxjs';
 
 import { FieldActionTypes, FieldActions } from './field.action';
-import { IField } from '../../model';
+import { IField } from '../../models';
 
 export interface State extends EntityState<IField> {
     // StarterResource: IResource | null;
