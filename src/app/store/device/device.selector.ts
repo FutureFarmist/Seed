@@ -1,40 +1,66 @@
-import { createSelector, createFeatureSelector } from '@ngrx/store';
-
-// from Feature
-import * as fromIndex from './../index';
+import {
+  createSelector,
+  createFeatureSelector,
+  ActionReducerMap,
+} from '@ngrx/store';
 import * as fromDevice from './device.reducer';
+import { PIN_GROUND, PIN_INPUT, PIN_OUTPUT } from '../../models';
 
-/* export const getSyntaxState = createSelector(
-  fromDeskIndex.getDeskState,
-  (state: fromDeskIndex.DeskState) => state.syntax
-); */
+export interface State {
+  devices: fromDevice.State;
+}
 
-// export const getSyntaxEntitiesState = createSelector(
-//   fromDeskIndex.getDeskState,
-//   state => state.syntax
-// );
+export const reducers: ActionReducerMap<State> = {
+  devices: fromDevice.reducer,
+};
 
-export const {
-  // select the array of ids
-  selectIds: getDeviceIds,
+export const selectDeviceState = createFeatureSelector<fromDevice.State>('device');
 
-  // select the dictionary of entities
-  selectEntities: getDeviceEntities,
-
-  // select the array of the entity
-  selectAll: getAllDevices,
-
-  // select the total count
-  selectTotal: getDeviceTotal
-} = fromDevice.adapter.getSelectors(); // fromIndex.getDeviceState
-
-/* 
-export const getXState = createSelector(
-  fromX.getY,
-  (state: fromF.FState) => state.x
+export const selectDeviceIds = createSelector(
+  selectDeviceState,
+  fromDevice.selectDeviceIds // shorthand for devicesState => fromDevice.selectDeviceIds(devicesState)
+);
+export const selectDeviceEntities = createSelector(
+  selectDeviceState,
+  fromDevice.selectDeviceEntities
+);
+export const selectAllDevices = createSelector(
+  selectDeviceState,
+  fromDevice.selectAllDevices
+);
+export const selectDeviceTotal = createSelector(
+  selectDeviceState,
+  fromDevice.selectDeviceTotal
+);
+export const selectCurrentDeviceId = createSelector(
+  selectDeviceState,
+  fromDevice.getSelectedDeviceId
 );
 
-export const getY = createSelector(
-  getXState,
-  fromX.getY
+/* export const selectCurrentDevice = createSelector(
+  selectDeviceEntities,
+  selectCurrentDeviceId,
+  (deviceEntities, deviceId) => deviceEntities[deviceId]
 ); */
+
+export const selectSensors = createSelector(
+  selectDeviceState,
+  fromDevice.selectAllDevices,
+  // selectAllDevices,
+  (_, devices) => {
+    devices.filter((device) => {
+      console.log("filer sensor");
+      (device.PinType !== PIN_GROUND && device.PinMode == PIN_INPUT)
+    });
+  });
+  
+  export const selectActuators = createSelector(
+    selectDeviceState,
+    fromDevice.selectAllDevices,
+        //  selectAllDevices,
+         (_, devices) => { 
+           devices.filter((device) => {
+            (device.PinType !== PIN_GROUND && device.PinMode == PIN_OUTPUT)
+           });
+         }
+       );

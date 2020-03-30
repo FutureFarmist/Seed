@@ -1,0 +1,115 @@
+
+
+    <input (keyup.enter)="updateName($event.target.value)" (blur)="updateName($event.target.value)" placeholder="Name"
+      value="{{ctl.Name}}" matInput />
+
+    <textarea (keyup.enter)="updateDesc($event.target.value)" (blur)="updateDesc($event.target.value)"
+      placeholder="Description" matInput>{{ ctl.Desc }}</textarea>
+
+    <mat-slide-toggle (change)="toggleActive(ctl.Id)" [checked]="ctl.Active">Active</mat-slide-toggle><br /><br />
+
+    <mat-form-field>
+      <mat-label>Controlling Factor</mat-label>
+      <mat-select [formControl]="controllingFactorFc" (selectionChange)="updateControllingFactor($event.value)" multiple>
+        <mat-option *ngFor="let factor of controllingFactors" [value]="factor.value">{{ factor.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Control Policy</mat-label>
+      <mat-select [formControl]="controlPolicyFc" (selectionChange)="updatePolicy($event.value)">
+        <mat-option *ngFor="let policy of controlPolicies" [value]="policy.value">{{ policy.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="ctl.Policy !== TIME_POLICY">
+      <mat-label>Scheme</mat-label>
+      <mat-select [formControl]="schemeFc" (selectionChange)="updateScheme($event.value)">
+        <mat-option *ngFor="let scheme of schemes" [value]="scheme.value" matTooltip="{{ scheme.desc }}">
+          {{ scheme.name }}</mat-option>
+      </mat-select>
+    </mat-form-field><br /><br />
+
+    <mat-form-field *ngIf="ctl.Policy !== TIME_POLICY">
+      <label>Sensors</label>
+      <mat-label>Sensors</mat-label>
+      <mat-select [formControl]="sensorsFc" (selectionChange)="updateSensors($event.value)" multiple>
+        <mat-option *ngFor="let ss of sensors" [value]="ss.Id">{{
+          ss.Name
+        }}</mat-option>
+      </mat-select><br><br>
+    </mat-form-field>
+
+    <div *ngIf="ctl.ControlScheme === this.VALUE_CONTROL && ctl.Policy !== TIME_POLICY">
+
+      <br><br><label>Optimal Value</label>
+      <input matInput placeholder="Optimal Value" [value]="ctl.OptimalVal"
+        (keyup.enter)="updateOptimalVal($event.target.value)" (blur)="updateOptimalVal($event.target.value)" />
+      <br><label>Preferred Minimum Value</label>
+      <input matInput placeholder="Preferred Minimum Value" value="{{ctl.PreferredMin}}"
+        (keyup.enter)="updateMinVal($event.target.value)" (blur)="updateMinVal($event.target.value)" />
+      <br><label>Preferred Maximum Value</label>
+      <input matInput placeholder="Preferred Maximum Value" value="{{ctl.PreferredMax}}"
+        (keyup.enter)="updateMaxVal($event.target.value)" (blur)="updateMaxVal($event.target.value)" />
+      <br><br>
+      
+      <label>{{decreasingDevicesTx}}</label><br>
+      <mat-form-field>
+        <mat-label>{{decreasingDevicesTx}}</mat-label>
+        <mat-select [formControl]="decreasingDevicesFc" (selectionChange)="updateDecreasingDevice($event.value)"
+          multiple>
+          <mat-option *ngFor="let device of actuators" [value]="device.Id">{{ device.Name }}</mat-option>
+        </mat-select>
+      </mat-form-field><br><br>
+   
+      
+      <label>{{increasingDevicesTx}}</label><br>
+      <mat-form-field>
+        <mat-label>{{increasingDevicesTx}}</mat-label>
+        <mat-select [formControl]="increasingDevicesFc" (selectionChange)="updateIncreasingDevice($event.value)"
+          multiple>
+          <mat-option *ngFor="let device of actuators" [value]="device.Id">{{ device.Name }}</mat-option>
+        </mat-select>
+      </mat-form-field><br><br>
+      
+    </div>
+    
+    <div
+      *ngIf="(ctl.Policy !== this.TIME_POLICY && ctl.ControlScheme !== this.VALUE_CONTROL) || 
+      ctl.Policy === this.TIME_POLICY">
+      <!-- <div *ngIf="ctl.Policy !== this.TIME_POLICY || (ctl.Policy === this.TIME_POLICY &&
+      ctl.ControlScheme === this.VALUE_CONTROL)"> -->
+      <label>{{getTrueDeviceTx()}}</label><br>
+      <mat-form-field>
+        <mat-label>{{getTrueDeviceTx()}}</mat-label>
+        <mat-select [formControl]="trueDevicesFc" (selectionChange)="updateTrueDevice($event.value)" multiple>
+          <mat-option *ngFor="let device of actuators" [value]="device.Id">{{ device.Name }}</mat-option>
+        </mat-select>
+      </mat-form-field><br><br>
+    </div>
+    
+    <div
+      *ngIf="(ctl.Policy !== this.TIME_POLICY && ctl.ControlScheme !== this.VALUE_CONTROL) || 
+      (ctl.Policy !== this.TIME_POLICY && ctl.ControlScheme !== this.VALUE_CONTROL)">
+      
+      <label>{{falseDevicesTx}}</label><br>
+      <mat-form-field>
+        <mat-label>{{falseDevicesTx}}</mat-label>
+        <mat-select [formControl]="falseDevicesFc" (selectionChange)="updateFalseDevice($event.value)" multiple>
+          <mat-option *ngFor="let device of actuators" [value]="device.Id">{{ device.Name }}</mat-option>
+        </mat-select>
+      </mat-form-field><br><br>
+
+    </div>
+
+    <div *ngIf="ctl.Policy !== MEASUREMENT_POLICY">
+      <br /><br />Working Time<br />
+      <cron *ngIf="ctl.Cron" [(cron)]="ctl.Cron"></cron>
+      <br><br>
+    </div>
+    <!-- <br><br>
+    sensors
+    {{this.naasSv.sensors | json}}
+    <br><br>
+    actuators
+    {{this.naasSv.actuators | json}} -->

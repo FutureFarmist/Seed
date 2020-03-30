@@ -15,3 +15,10 @@ export const deleteController = createAction('[Controller/API] Delete Controller
 export const deleteControllers = createAction('[Controller/API] Delete Controllers', props<{ ids: string[] }>());
 export const deleteControllersByPredicate = createAction('[Controller/API] Delete Controllers By Predicate', props<{ predicate: Predicate<Controller> }>());
 export const clearControllers = createAction('[Controller/API] Clear Controllers');
+
+/* export const dbUpdateControllerSuccessful = createAction(
+         '[Controller/API] dbUpdateControllerSuccessful'
+       );
+export const dbUpdateControllerFail = createAction(
+         '[Controller/API] dbUpdateControllerFail'
+       ); */

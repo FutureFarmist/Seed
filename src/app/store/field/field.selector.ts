@@ -1,40 +1,43 @@
-import { createSelector, createFeatureSelector } from '@ngrx/store';
-
-// from Feature
-import * as fromRoot from './../index';
+import {
+  createSelector,
+  createFeatureSelector,
+  ActionReducerMap,
+} from '@ngrx/store';
 import * as fromField from './field.reducer';
 
-/* export const getFieldState = createSelector(
-  fromRoot.getFieldState,
-  (state: fromRoot.State) => state.field
-); */
+export interface State {
+  fields: fromField.State;
+}
 
-// export const getSyntaxEntitiesState = createSelector(
-//   fromDeskIndex.getDeskState,
-//   state => state.syntax
-// );
+export const reducers: ActionReducerMap<State> = {
+  fields: fromField.reducer,
+};
 
-export const {
-  // select the array of ids
-  selectIds: getFieldIds,
+export const selectFieldState = createFeatureSelector<fromField.State>('field');
 
-  // select the dictionary of entities
-  selectEntities: getFieldEntities,
-
-  // select the array of the entity
-  selectAll: getAllFields,
-
-  // select the total count
-  selectTotal: getFieldTotal
-} = fromField.adapter.getSelectors(); // fromRoot.getFieldState
-
-/* 
-export const getXState = createSelector(
-  fromX.getY,
-  (state: fromF.FState) => state.x
+export const selectFieldIds = createSelector(
+  selectFieldState,
+  fromField.selectFieldIds // shorthand for fieldsState => fromField.selectFieldIds(fieldsState)
+);
+export const selectFieldEntities = createSelector(
+  selectFieldState,
+  fromField.selectFieldEntities
+);
+export const selectAllFields = createSelector(
+  selectFieldState,
+  fromField.selectAllFields
+);
+export const selectFieldTotal = createSelector(
+  selectFieldState,
+  fromField.selectFieldTotal
+);
+export const selectCurrentFieldId = createSelector(
+  selectFieldState,
+  fromField.getSelectedFieldId
 );
 
-export const getY = createSelector(
-  getXState,
-  fromX.getY
-); */
+export const selectCurrentField = createSelector(
+  selectFieldEntities,
+  selectCurrentFieldId,
+  (fieldEntities, fieldId) => fieldEntities[fieldId]
+);

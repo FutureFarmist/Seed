@@ -14,7 +14,7 @@ import {
   MatSlideToggleChange
 } from '@angular/material/slide-toggle';
 import {
-  IDevice, DEVICE_LIST
+  Device, DEVICE_LIST
 } from '../../models';
 
 @Component({
@@ -49,9 +49,9 @@ import {
   styleUrls: ['./pins.component.scss']
 })
 export class PinsComponent implements OnInit {
-  devices: Array<IDevice> = [];
-  devicesState$: BehaviorSubject<Array<IDevice>> = new BehaviorSubject<
-    Array<IDevice>
+  devices: Array<Device> = [];
+  devicesState$: BehaviorSubject<Array<Device>> = new BehaviorSubject<
+    Array<Device>
   >([]);
   devices$$: Subscription;
   deviceList = DEVICE_LIST;
@@ -105,9 +105,10 @@ export class PinsComponent implements OnInit {
     this.devicesState$.next(this.devices);
     console.log('pin');
 
-    this.devices$$ = this.naasSv.readDevices().subscribe(devices => {
-      // let devices = ;
-      this.devicesState$.next(JSON.parse(devices).filter(val => val.DeviceId));
+    this.devices$$ = this.naasSv.readDevices().subscribe(r_devices => {
+      let devices = JSON.parse(r_devices);
+      this.naasSv.addDevices(devices);
+      this.devicesState$.next(devices.filter(val => val.Name));
     });
   }
   readDevices() {}
@@ -118,7 +119,7 @@ export class PinsComponent implements OnInit {
           if (pin.BoolState) {
             this.naasSv.pinOff(pin.Pin).subscribe((result: string) => {
               pin.BoolState = false;
-              this.emitdevices(this.devices);
+              this.emitDevices(this.devices);
             });
 
             // this.naasSv.pinOff(pin.Pin).subscribe(this.handledevicesState);
@@ -126,7 +127,7 @@ export class PinsComponent implements OnInit {
           } else {
             this.naasSv.pinOn(pin.Pin).subscribe((result: string) => {
               pin.BoolState = true;
-              this.emitdevices(this.devices);
+              this.emitDevices(this.devices);
             });
             // this.naasSv.pinOn(pin.Pin).subscribe(this.handledevicesState);
             break;
@@ -136,7 +137,7 @@ export class PinsComponent implements OnInit {
     }
   }
 
-  emitdevices(devices: IDevice[]) {
+  emitDevices(devices: Device[]) {
     this.devicesState$.next(devices);
   }
 
@@ -144,10 +145,10 @@ export class PinsComponent implements OnInit {
     if (devicesState) {
       console.log('handledevicesState');
       let ps = JSON.parse(devicesState);
-      let devices: IDevice[] = [];
+      let devices: Device[] = [];
 
       // push to devicesState$
-      this.emitdevices(devices);
+      this.emitDevices(devices);
     }
   }
 

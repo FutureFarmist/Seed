@@ -71,7 +71,7 @@ export const metaReducers: MetaReducer<State>[] = !environment.production
   ? [logger, storeFreeze] // , storeFreeze
   : [];
   
-export const getFieldState = (state: State) => state.field;
-export const getPlantState = (state: State) => state.plant;
 export const getDeviceState = (state: State) => state.device;
 export const getControllerState = (state: State) => state.controller;
+export const getFieldState = (state: State) => state.field;
+export const getPlantState = (state: State) => state.plant;

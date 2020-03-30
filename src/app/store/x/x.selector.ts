@@ -1,40 +1,44 @@
-/*import { createSelector, createFeatureSelector } from '@ngrx/store';
+import {
+  createSelector,
+  createFeatureSelector,
+  ActionReducerMap,
+} from '@ngrx/store';
+import * as fromDevice from './x.reducer';
 
-// from Feature
-import * as fromDeskIndex from './../index';
-import * as fromSyntax from './syntax.reducer';
+export interface State {
+  devices: fromDevice.State;
+}
 
-export const getSyntaxState = createSelector(
-  fromDeskIndex.getDeskState,
-  (state: fromDeskIndex.DeskState) => state.syntax
+export const reducers: ActionReducerMap<State> = {
+  devices: fromDevice.reducer,
+};
+
+export const selectDeviceState = createFeatureSelector<fromDevice.State>('device');
+
+export const selectDeviceIds = createSelector(
+  selectDeviceState,
+  fromDevice.selectDeviceIds // shorthand for devicesState => fromDevice.selectDeviceIds(devicesState)
+);
+export const selectDeviceEntities = createSelector(
+  selectDeviceState,
+  fromDevice.selectDeviceEntities
+);
+export const selectAllDevices = createSelector(
+  selectDeviceState,
+  fromDevice.selectAllDevices
+);
+export const selectDeviceTotal = createSelector(
+  selectDeviceState,
+  fromDevice.selectDeviceTotal
 );
 
-// export const getSyntaxEntitiesState = createSelector(
-//   fromDeskIndex.getDeskState,
-//   state => state.syntax
+// export const selectCurrentDeviceId = createSelector(
+//   selectDeviceState,
+//   fromDevice.getSelectedDeviceId
 // );
 
-export const {
-  // select the array of ids
-  selectIds: getDeskIds,
-
-  // select the dictionary of entities
-  selectEntities: getDeskEntities,
-
-  // select the array of the entity
-  selectAll: getAllDesks,
-
-  // select the total count
-  selectTotal: getDeskTotal
-} = fromSyntax.adapter.getSelectors(getSyntaxState);*/
-
-/* 
-export const getXState = createSelector(
-  fromX.getY,
-  (state: fromF.FState) => state.x
-);
-
-export const getY = createSelector(
-  getXState,
-  fromX.getY
-); */
+// export const selectCurrentDevice = createSelector(
+//   selectDeviceEntities,
+//   selectCurrentDeviceId,
+//   (deviceEntities, deviceId) => deviceEntities[deviceId]
+// );

@@ -1,42 +1,50 @@
-import { createSelector, createFeatureSelector } from '@ngrx/store';
-
-// from Feature
-import * as fromIndex from './../index';
+import {
+  createSelector,
+  createFeatureSelector,
+  ActionReducerMap,
+} from '@ngrx/store';
 import * as fromController from './controller.reducer';
+import * as fromIndex from '../index';
 
-/* export const getSyntaxState = createSelector(
-  fromIndex.getControllerState,
-  (state: fromController.State) => state.controller
+export interface State {
+  controllers: fromController.State;
+}
+
+export const reducers: ActionReducerMap<State> = {
+  controllers: fromController.reducer,
+};
+
+/* export const selectControllerState = createSelector(fromIndex.State,
+  (state) => {
+    state.
+  }); */
+export const selectControllerState = createFeatureSelector<fromIndex.State, fromController.State>('controller');
+
+export const selectControllerIds = createSelector(
+  selectControllerState,
+  fromController.selectControllerIds // shorthand for controllersState => fromController.selectControllerIds(controllersState)
+  );
+export const selectControllerEntities = createSelector(
+  selectControllerState,
+  fromController.selectControllerEntities
+  );
+export const selectAllControllers = createSelector(
+  selectControllerState,
+  fromController.selectAllControllers
+  );
+export const selectControllerTotal = createSelector(
+  selectControllerState,
+  fromController.selectControllerTotal
 );
- */
-// export const getSyntaxEntitiesState = createSelector(
-//   fromDeskIndex.getDeskState,
-//   state => state.syntax
+
+
+// export const selectCurrentControllerId = createSelector(
+//   selectControllerState,
+//   fromController.getSelectedControllerId
 // );
 
-export const {
-  // select the array of ids
-  selectIds: getControllerIds,
-
-  // select the dictionary of entities
-  selectEntities: getControllerEntities,
-
-  // select the array of the entity
-  selectAll: getAllControllers,
-
-  // select the total count
-  selectTotal: getControllerTotal
-} = fromController.adapter.getSelectors(); // fromIndex.getControllerState
-
-
-
-/* 
-export const getXState = createSelector(
-  fromX.getY,
-  (state: fromF.FState) => state.x
-);
-
-export const getY = createSelector(
-  getXState,
-  fromX.getY
+/* export const selectCurrentController = createSelector(
+  selectControllerEntities,
+  selectCurrentControllerId,
+  (controllerEntities, controllerId) => controllerEntities[controllerId]
 ); */

@@ -1,22 +1,29 @@
-/* import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
-import { Effect, Actions, ofType } from '@ngrx/effects';
-import { Observable } from 'rxjs/Observable';
-import { map } from 'rxjs/operators';
+import { Effect, Actions, ofType, createEffect } from '@ngrx/effects';
+// import { Observable } from 'rxjs/Observable';
+import { map, mergeMap } from 'rxjs/operators';
 
-import { XActionTypes } from './x.action';
+import { updateControllers, deleteController } from './controller.action';
+import { NaasService } from '../../services/naas.service';
 
 // import { Y } from './x2.action';
 
 @Injectable()
-export class XEffects {
+export class ControllerEffects {
+  loadMovies$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(updateControllers || deleteController),
+        mergeMap(() => this.naasSv.dbUpdateControllers().pipe(
+          map((updateControllersResult) => {
+            console.log('updateControllersResult' + updateControllersResult);
+          })
+        ))
+      ),
+    { dispatch: false }
+  );
 
-    @Effect()
-    Y$: Observable<Action> = this.actions$.pipe(
-        ofType(XActionTypes.Y),
-        map(() => new Y())
-    );
-
-    constructor(private actions$: Actions) {}
+  constructor(private actions$: Actions, private naasSv: NaasService) {}
 }
- */
+

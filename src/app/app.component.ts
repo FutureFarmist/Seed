@@ -7,9 +7,9 @@ import { Component } from '@angular/core';
       Seed for NAAS @{{ host }}
     </div>
     <div>
-      <mat-tab-group [ngStyle]="{ width: '100%' }">
+      <mat-tab-group [ngStyle]="{ width: '100%' }" mat-align-tabs="center">
         <mat-tab label="Controller" origin="1">
-          <controllers></controllers>
+          <ctls></ctls>
         </mat-tab>
         <mat-tab label="Status" origin="2">
           <pins></pins>

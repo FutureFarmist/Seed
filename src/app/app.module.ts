@@ -42,10 +42,11 @@ import { CameraComponent } from './containers/camera/camera.component';
 import { NaasService } from './services/naas.service';
 import { PinsComponent } from './containers/pins/pins.component';
 import { SetupPinComponent } from './containers/setup-pin/setup-pin.component';
-import { ControllersComponent } from './containers/controllers/controllers.component';
+import { CtlsComponent } from './containers/ctls/ctls.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CronComponent } from './containers/cron/cron.component';
 import { RangeComponent } from './components/range/range.component';
+import { ControllerComponent } from './components/controller/controller.component';
 // import * as fromApp from './+state/app.reducer';
 // import { AppEffects } from './+state/app.effects';
 // import { AppFacade } from './+state/app.facade';
@@ -61,9 +62,10 @@ import { RangeComponent } from './components/range/range.component';
     CameraComponent,
     PinsComponent,
     SetupPinComponent,
-    ControllersComponent,
+    CtlsComponent,
     CronComponent,
-    RangeComponent
+    RangeComponent,
+    ControllerComponent
   ],
   imports: [
     BrowserModule,
@@ -130,7 +132,7 @@ import { RangeComponent } from './components/range/range.component';
     FlexLayoutModule,
     MaterialModule,
     // NxModule.forRoot(),
-    StoreModule.forRoot(
+    /* StoreModule.forRoot(
       {},
       {
         metaReducers: !environment.production ? [] : [],
@@ -139,7 +141,7 @@ import { RangeComponent } from './components/range/range.component';
           strictStateImmutability: true
         }
       }
-    ),
+    ), */
     // EffectsModule.forRoot([AppEffects]),
     // !environment.production ? StoreDevtoolsModule.instrument() : [],
     // StoreModule.forFeature(fromApp.APP_FEATURE_KEY, fromApp.reducer)
