@@ -59,12 +59,12 @@ export class NaasService implements OnInit {
       /* console.log("sensor filter");
       console.log(device); */
       return (
-        device.Name != "" && 
-        device.PinType !== PIN_GROUND && 
+        device.Name != "" &&
+        device.PinType !== PIN_GROUND &&
         device.PinMode === PIN_INPUT
       );
     });
-    
+
     this.actuators = deviceArray.filter((device) => {
       return (
         device.Name != '' &&
@@ -216,8 +216,8 @@ export class NaasService implements OnInit {
       // SeasonEndDate: "",
 
       /* ActiveDaily: false,
-      
-      
+
+
       ActiveWeekDayRanges: [],
       ActiveMonthDayRanges: [],
       ActiveMonthRanges: [],

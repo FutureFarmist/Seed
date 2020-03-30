@@ -74,7 +74,7 @@ import { ControllerComponent } from './components/controller/controller.componen
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    NgbModule,
+    // NgbModule,
     // HammerModule,
     // IgxTimePickerModule,
 

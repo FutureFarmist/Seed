@@ -31,7 +31,8 @@ import { FormControl } from '@angular/forms';
   <button mat-raised-button (click)="updateControllers()">Save</button>
   <pre>{{ ctls | json }}</pre>
   <br /><br />
-  <pre>{{ this.naasSv.controllerArray | json }}</pre>`,
+  `,
+  // <pre>{{ this.naasSv.controllerArray | json }}</pre>
   // <cron *ngIf="testCron" [(cron)]="testCron"></cron>
   // templateUrl: './ctls.component.html',
   styleUrls: ['./ctls.component.scss']
@@ -49,7 +50,7 @@ export class CtlsComponent implements OnInit, OnDestroy, AfterViewInit {
   ctls$$: Subscription;
   // testCron: Cron = this.naasSv.newCron();
 
-  
+
 
   constructor(private naasSv: NaasService) {
     // this.ctls$ = this.naasSv.controllerArray$;
@@ -65,7 +66,7 @@ export class CtlsComponent implements OnInit, OnDestroy, AfterViewInit {
         // this.ctls$.next(r_ctls);
       }
     );
-    
+
     // this.testCron = this.naasSv.newCron();
     /* this.testCron = {
       Minute: '*',
@@ -101,7 +102,7 @@ export class CtlsComponent implements OnInit, OnDestroy, AfterViewInit {
     this.naasSv.updateControllers(this.ctls);
   }
 
-  
+
 
   deleteController(id) {
     if (id) {
