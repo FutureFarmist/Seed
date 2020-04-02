@@ -64,7 +64,7 @@ export class SetupPinComponent implements OnInit {
         PinType: 0,
         PinMode: 0,
         DeviceId: '',
-        BoolState: false
+        BoolState: false,
       },
       {
         Id: '2',
@@ -78,6 +78,7 @@ export class SetupPinComponent implements OnInit {
       {
         Id: '3',
         Pin: 3,
+        GPIO: 2,
         Name: '',
         PinType: 0,
         PinMode: 0,
@@ -96,6 +97,7 @@ export class SetupPinComponent implements OnInit {
       {
         Id: '5',
         Pin: 5,
+        GPIO: 3,
         Name: '',
         PinType: 0,
         PinMode: 0,
@@ -114,6 +116,7 @@ export class SetupPinComponent implements OnInit {
       {
         Id: '7',
         Pin: 7,
+        GPIO: 4,
         Name: '',
         PinType: 0,
         PinMode: 0,
@@ -123,6 +126,7 @@ export class SetupPinComponent implements OnInit {
       {
         Id: '8',
         Pin: 8,
+        GPIO: 14,
         Name: '',
         PinType: 0,
         PinMode: 0,
@@ -141,6 +145,7 @@ export class SetupPinComponent implements OnInit {
       {
         Id: '10',
         Pin: 10,
+        GPIO: 15,
         Name: '',
         PinType: 0,
         PinMode: 0,
@@ -150,6 +155,7 @@ export class SetupPinComponent implements OnInit {
       {
         Id: '11',
         Pin: 11,
+        GPIO: 17,
         Name: '',
         PinType: 0,
         PinMode: 0,
@@ -159,6 +165,7 @@ export class SetupPinComponent implements OnInit {
       {
         Id: '12',
         Pin: 12,
+        GPIO: 18,
         Name: '',
         PinType: 0,
         PinMode: 0,
@@ -168,6 +175,7 @@ export class SetupPinComponent implements OnInit {
       {
         Id: '13',
         Pin: 13,
+        GPIO: 27,
         Name: '',
         PinType: 0,
         PinMode: 0,
@@ -186,6 +194,7 @@ export class SetupPinComponent implements OnInit {
       {
         Id: '15',
         Pin: 15,
+        GPIO: 22,
         Name: '',
         PinType: 0,
         PinMode: 0,
@@ -195,6 +204,7 @@ export class SetupPinComponent implements OnInit {
       {
         Id: '16',
         Pin: 16,
+        GPIO: 23,
         Name: '',
         PinType: 0,
         PinMode: 0,
@@ -213,6 +223,7 @@ export class SetupPinComponent implements OnInit {
       {
         Id: '18',
         Pin: 18,
+        GPIO: 24,
         Name: '',
         PinType: 0,
         PinMode: 0,
@@ -222,6 +233,7 @@ export class SetupPinComponent implements OnInit {
       {
         Id: '19',
         Pin: 19,
+        GPIO: 10,
         Name: '',
         PinType: 0,
         PinMode: 0,
@@ -240,6 +252,7 @@ export class SetupPinComponent implements OnInit {
       {
         Id: '21',
         Pin: 21,
+        GPIO: 9,
         Name: '',
         PinType: 0,
         PinMode: 0,
@@ -249,6 +262,7 @@ export class SetupPinComponent implements OnInit {
       {
         Id: '22',
         Pin: 22,
+        GPIO: 25,
         Name: '',
         PinType: 0,
         PinMode: 0,
@@ -258,6 +272,7 @@ export class SetupPinComponent implements OnInit {
       {
         Id: '23',
         Pin: 23,
+        GPIO: 11,
         Name: '',
         PinType: 0,
         PinMode: 0,
@@ -267,6 +282,7 @@ export class SetupPinComponent implements OnInit {
       {
         Id: '24',
         Pin: 24,
+        GPIO: 8,
         Name: '',
         PinType: 0,
         PinMode: 0,
@@ -285,6 +301,7 @@ export class SetupPinComponent implements OnInit {
       {
         Id: '26',
         Pin: 26,
+        GPIO: 7,
         Name: '',
         PinType: 0,
         PinMode: 0,
@@ -294,6 +311,7 @@ export class SetupPinComponent implements OnInit {
       {
         Id: '27',
         Pin: 27,
+        GPIO: 0,
         Name: '',
         PinType: 0,
         PinMode: 0,
@@ -303,6 +321,7 @@ export class SetupPinComponent implements OnInit {
       {
         Id: '28',
         Pin: 28,
+        GPIO: 1,
         Name: '',
         PinType: 0,
         PinMode: 0,
@@ -312,6 +331,7 @@ export class SetupPinComponent implements OnInit {
       {
         Id: '29',
         Pin: 29,
+        GPIO: 5,
         Name: '',
         PinType: 0,
         PinMode: 0,
@@ -330,6 +350,7 @@ export class SetupPinComponent implements OnInit {
       {
         Id: '31',
         Pin: 31,
+        GPIO: 6,
         Name: '',
         PinType: 0,
         PinMode: 0,
@@ -339,6 +360,7 @@ export class SetupPinComponent implements OnInit {
       {
         Id: '32',
         Pin: 32,
+        GPIO: 12,
         Name: '',
         PinType: 0,
         PinMode: 0,
@@ -348,6 +370,7 @@ export class SetupPinComponent implements OnInit {
       {
         Id: '33',
         Pin: 33,
+        GPIO: 13,
         Name: '',
         PinType: 0,
         PinMode: 0,
@@ -366,6 +389,7 @@ export class SetupPinComponent implements OnInit {
       {
         Id: '35',
         Pin: 35,
+        GPIO: 19,
         Name: '',
         PinType: 0,
         PinMode: 0,
@@ -375,6 +399,7 @@ export class SetupPinComponent implements OnInit {
       {
         Id: '36',
         Pin: 36,
+        GPIO: 16,
         Name: '',
         PinType: 0,
         PinMode: 0,
@@ -384,6 +409,7 @@ export class SetupPinComponent implements OnInit {
       {
         Id: '37',
         Pin: 37,
+        GPIO: 26,
         Name: '',
         PinType: 0,
         PinMode: 0,
@@ -393,6 +419,7 @@ export class SetupPinComponent implements OnInit {
       {
         Id: '38',
         Pin: 38,
+        GPIO: 20,
         Name: '',
         PinType: 0,
         PinMode: 0,
@@ -411,6 +438,7 @@ export class SetupPinComponent implements OnInit {
       {
         Id: '40',
         Pin: 40,
+        GPIO: 21,
         Name: '',
         PinType: 0,
         PinMode: 0,
@@ -428,7 +456,7 @@ export class SetupPinComponent implements OnInit {
       console.log(devices_list);
       this.pins.forEach((pin, i, pins) => {
         devices_list.forEach(device => {
-          if (pin.Pin == device.Pin) {
+          if (device && device.Name && pin.Pin == device.Pin) {
             pins[i] = device;
           }
         });
@@ -439,7 +467,7 @@ export class SetupPinComponent implements OnInit {
   }
 
   updateName(pin: number, name: string) {
-    if (pin && name) {
+    if (pin) {
       this.pins
         .filter(value => value.Pin == pin)
         .forEach(value => {

@@ -6,7 +6,7 @@
     <textarea (keyup.enter)="updateDesc($event.target.value)" (blur)="updateDesc($event.target.value)"
       placeholder="Description" matInput>{{ ctl.Desc }}</textarea>
 
-    <mat-slide-toggle (change)="toggleActive(ctl.Id)" [checked]="ctl.Active">Active</mat-slide-toggle><br /><br />
+    <mat-slide-toggle (change)="toggleActive()" [checked]="ctl.Active">Active</mat-slide-toggle><br /><br />
 
     <mat-form-field>
       <mat-label>Controlling Factor</mat-label>
@@ -52,7 +52,7 @@
       <input matInput placeholder="Preferred Maximum Value" value="{{ctl.PreferredMax}}"
         (keyup.enter)="updateMaxVal($event.target.value)" (blur)="updateMaxVal($event.target.value)" />
       <br><br>
-      
+
       <label>{{decreasingDevicesTx}}</label><br>
       <mat-form-field>
         <mat-label>{{decreasingDevicesTx}}</mat-label>
@@ -61,8 +61,8 @@
           <mat-option *ngFor="let device of actuators" [value]="device.Id">{{ device.Name }}</mat-option>
         </mat-select>
       </mat-form-field><br><br>
-   
-      
+
+
       <label>{{increasingDevicesTx}}</label><br>
       <mat-form-field>
         <mat-label>{{increasingDevicesTx}}</mat-label>
@@ -71,11 +71,11 @@
           <mat-option *ngFor="let device of actuators" [value]="device.Id">{{ device.Name }}</mat-option>
         </mat-select>
       </mat-form-field><br><br>
-      
+
     </div>
-    
+
     <div
-      *ngIf="(ctl.Policy !== this.TIME_POLICY && ctl.ControlScheme !== this.VALUE_CONTROL) || 
+      *ngIf="(ctl.Policy !== this.TIME_POLICY && ctl.ControlScheme !== this.VALUE_CONTROL) ||
       ctl.Policy === this.TIME_POLICY">
       <!-- <div *ngIf="ctl.Policy !== this.TIME_POLICY || (ctl.Policy === this.TIME_POLICY &&
       ctl.ControlScheme === this.VALUE_CONTROL)"> -->
@@ -87,11 +87,11 @@
         </mat-select>
       </mat-form-field><br><br>
     </div>
-    
+
     <div
-      *ngIf="(ctl.Policy !== this.TIME_POLICY && ctl.ControlScheme !== this.VALUE_CONTROL) || 
+      *ngIf="(ctl.Policy !== this.TIME_POLICY && ctl.ControlScheme !== this.VALUE_CONTROL) ||
       (ctl.Policy !== this.TIME_POLICY && ctl.ControlScheme !== this.VALUE_CONTROL)">
-      
+
       <label>{{falseDevicesTx}}</label><br>
       <mat-form-field>
         <mat-label>{{falseDevicesTx}}</mat-label>

@@ -1,6 +1,6 @@
 import { Injectable, OnInit, AfterContentInit } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
-import { Field, Device, Controller, Cron, Plant, PIN_GROUND, PIN_OUTPUT, PIN_INPUT } from '../models';
+import { Field, Device, Controller, Cron, Plant, PIN_GROUND, PIN_MODE_OUTPUT, PIN_MODE_INPUT } from '../models';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Store } from '@ngrx/store';
 
@@ -12,8 +12,8 @@ import * as controllerAction from "../store/controller/controller.action";
 import * as plantSelector from "../store/plant/plant.selector";
 import { Subscription } from 'rxjs';
 import { Update } from '@ngrx/entity';
-import { UpdateStr, UpdateNum } from '@ngrx/entity/src/models';
-import { addDevice, addDevices } from '../store/device/device.action';
+// import { UpdateStr, UpdateNum } from '@ngrx/entity';
+import * as deviceActions from '../store/device/device.action';
 
 @Injectable({
   providedIn: 'root'
@@ -55,21 +55,21 @@ export class NaasService implements OnInit {
   deviceArray$ = this.store.select(deviceSelector.selectAllDevices);
   deviceArray$$ = this.deviceArray$.subscribe((deviceArray: Array<Device>) => {
     this.deviceArray = deviceArray;
-    this.sensors = deviceArray.filter((device) => {
+    this.sensors = deviceArray.filter(device => {
       /* console.log("sensor filter");
       console.log(device); */
       return (
-        device.Name != "" &&
+        device.Name != '' &&
         device.PinType !== PIN_GROUND &&
-        device.PinMode === PIN_INPUT
+        device.PinMode === PIN_MODE_INPUT
       );
     });
 
-    this.actuators = deviceArray.filter((device) => {
+    this.actuators = deviceArray.filter(device => {
       return (
         device.Name != '' &&
         device.PinType !== PIN_GROUND &&
-        device.PinMode === PIN_OUTPUT
+        device.PinMode === PIN_MODE_OUTPUT
       );
     });
     /* console.log('sensors');
@@ -132,11 +132,18 @@ export class NaasService implements OnInit {
   }
 
   addDevices(devices: Device[]) {
-    console.log("add devices");
-    this.store.dispatch(addDevices({Devices: devices}));
+    console.log('add devices');
+    this.store.dispatch(deviceActions.addDevices({ Devices: devices }));
   }
+  
+  upsertDevices(devices: Device[]) {
+    console.log('upsertDevices');
+    this.store.dispatch(deviceActions.upsertDevices({ Devices: devices }));
+  }
+  
 
   pinOn(pin: number): Observable<string> {
+    console.log('pinOff', pin);
     if (pin) {
       console.log('pinOn');
       return this.http.post<string>(
@@ -148,6 +155,7 @@ export class NaasService implements OnInit {
   }
 
   pinOff(pin: number): Observable<string> {
+    console.log('pinOff', pin);
     if (pin) {
       console.log('pinOff');
       return this.http.post<string>(
@@ -254,7 +262,7 @@ export class NaasService implements OnInit {
   }
 
   updateControllers(ctls: Array<Controller>) {
-    let ctls_changes: Array<UpdateNum<Controller>> = [];
+    let ctls_changes: Array<Update<Controller>> = [];
     if (ctls) {
       for (let ctl of ctls) {
         ctls_changes.push({
@@ -274,6 +282,8 @@ export class NaasService implements OnInit {
 
   newCron(second?: Boolean, year?: Boolean): Cron {
     let cron: Cron = {
+      // every based. This will translate into */10 every 10 seconds in cron
+      Second: '10',
       Minute: '*',
       Hour: '*',
       Dom: '*',

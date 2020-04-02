@@ -58,78 +58,45 @@ export class PinsComponent implements OnInit {
   constructor(private naasSv: NaasService) {}
 
   ngOnInit() {
-    this.devices = [];
-    // this.devices = [
-    //   { Pin: 1, Status: false, PinType: 0, Name: 'Sensor X' },
-    //   { Pin: 2, Status: false, PinType: 0 },
-    //   { Pin: 3, Status: false, PinType: 0 },
-    //   { Pin: 4, Status: false, PinType: 0 },
-    //   { Pin: 5, Status: false, PinType: 0 },
-    //   { Pin: 6, Status: false, PinType: 1 }, // ground
-    //   { Pin: 7, Status: false, PinType: 0 },
-    //   { Pin: 8, Status: false, PinType: 0 },
-    //   { Pin: 9, Status: false, PinType: 1 }, // ground
-    //   { Pin: 10, Status: false, PinType: 0 },
-    //   { Pin: 11, Status: false, PinType: 0 },
-    //   { Pin: 12, Status: false, PinType: 0 },
-    //   { Pin: 13, Status: false, PinType: 0 },
-    //   { Pin: 14, Status: false, PinType: 0 }, // ground
-    //   { Pin: 15, Status: false, PinType: 0 },
-    //   { Pin: 16, Status: false, PinType: 0 },
-    //   { Pin: 17, Status: false, PinType: 0 },
-    //   { Pin: 18, Status: false, PinType: 0 },
-    //   { Pin: 19, Status: false, PinType: 0 },
-    //   { Pin: 20, Status: false, PinType: 1 }, // ground
-    //   { Pin: 21, Status: false, PinType: 0 },
-    //   { Pin: 22, Status: false, PinType: 0 },
-    //   { Pin: 23, Status: false, PinType: 0 },
-    //   { Pin: 24, Status: false, PinType: 0 },
-    //   { Pin: 25, Status: false, PinType: 1 }, // ground
-    //   { Pin: 26, Status: false, PinType: 0 },
-    //   { Pin: 27, Status: false, PinType: 0 },
-    //   { Pin: 28, Status: false, PinType: 0 },
-    //   { Pin: 29, Status: false, PinType: 0 },
-    //   { Pin: 30, Status: false, PinType: 1 }, // ground
-    //   { Pin: 31, Status: false, PinType: 0 },
-    //   { Pin: 32, Status: false, PinType: 0 },
-    //   { Pin: 33, Status: false, PinType: 0 },
-    //   { Pin: 34, Status: false, PinType: 1 }, // ground
-    //   { Pin: 35, Status: false, PinType: 0 },
-    //   { Pin: 36, Status: false, PinType: 0 },
-    //   { Pin: 37, Status: false, PinType: 0 },
-    //   { Pin: 38, Status: false, PinType: 0 },
-    //   { Pin: 39, Status: false, PinType: 1 }, // ground
-    //   { Pin: 40, Status: false, PinType: 0 }
-    // ];
-
-    this.devicesState$.next(this.devices);
+    // this.devices = [];
+    // this.devicesState$.next(this.devices);
     console.log('pin');
 
     this.devices$$ = this.naasSv.readDevices().subscribe(r_devices => {
-      let devices = JSON.parse(r_devices);
-      this.naasSv.addDevices(devices);
-      this.devicesState$.next(devices.filter(val => val.Name));
+      // let deviceList = JSON.parse(r_devices);
+      this.devices = JSON.parse(r_devices);
+      this.naasSv.upsertDevices(this.devices);
+      this.devicesState$.next(this.devices.filter(val => val.Name));
     });
   }
   readDevices() {}
   togglePin(pinNo: number) {
+    console.log('togglePin');
+    console.log(pinNo);
     if (pinNo > 0) {
+      console.log('pinNO > 0');
       for (let pin of this.devices) {
-        if (pin.Pin === pinNo) {
+        console.log(pin);
+        if (pin.Pin == pinNo) {
+          console.log('pin = pinNO');
           if (pin.BoolState) {
+            console.log('pinOff');
             this.naasSv.pinOff(pin.Pin).subscribe((result: string) => {
               pin.BoolState = false;
               this.emitDevices(this.devices);
+              console.log('pinOff result:', result);
             });
-
-            // this.naasSv.pinOff(pin.Pin).subscribe(this.handledevicesState);
+            
+            // this.naasSv.pinOff(pin.Pin).subscribe(this.handleDevicesState);
             break;
           } else {
+            console.log('pinOn');
             this.naasSv.pinOn(pin.Pin).subscribe((result: string) => {
               pin.BoolState = true;
               this.emitDevices(this.devices);
+              console.log('pinOn result:', result);
             });
-            // this.naasSv.pinOn(pin.Pin).subscribe(this.handledevicesState);
+            // this.naasSv.pinOn(pin.Pin).subscribe(this.handleDevicesState);
             break;
           }
         }
@@ -153,13 +120,14 @@ export class PinsComponent implements OnInit {
   }
 
   getDeviceName(deviceId: string): string {
-    let name = this.deviceList.find(val => {
+    let name = this.devices.find(val => {
       return val.DeviceId == deviceId;
-    }).Name;
+    });
     if (name) {
-      return name;
+      return name.Name;
     } else {
       return 'Device';
     }
   }
+  
 }

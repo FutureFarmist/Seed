@@ -16,6 +16,26 @@ import { MatSelectChange } from '@angular/material/select';
 @Component({
   selector: 'cron',
   template: `
+    <div>
+    <mat-form-field>
+      <input
+      matInput
+      (keyup.enter)="updateSecond($event.target.value)"
+      (blur)="updateSecond($event.target.value)"
+      value="{{ cron.Second }}"
+      placeholder="Period in second"
+      />
+    </mat-form-field><br>
+    Available Range: 1 - 60<br>
+    {{ secondMessage }}
+    <p>
+    <b>Example</b><br />
+    10 = Every 10 seconds<br>
+    60 = Every minute
+    </p>
+    </div>
+    <br />
+
     <mat-slide-toggle
       (change)="toggleEveryMinute()"
       [checked]="cronEvery.Minute"
@@ -25,13 +45,15 @@ import { MatSelectChange } from '@angular/material/select';
       }}</mat-slide-toggle
     >
     <div *ngIf="!EveryMinute()">
-      <input
-        matInput
-        (keyup.enter)="updateMinute($event.target.value)"
-        (blur)="updateMinute($event.target.value)"
-        value="{{ cron.Minute }}"
-        placeholder="Minute range or target"
-      />{{ minuteMessage }}
+      <mat-form-field>
+        <input
+          matInput
+          (keyup.enter)="updateMinute($event.target.value)"
+          (blur)="updateMinute($event.target.value)"
+          value="{{ cron.Minute }}"
+          placeholder="Minute range or target"
+        />
+      </mat-form-field>{{ minuteMessage }}
       <p>
         <b>Example</b><br />
         8-17 = Work from XX:00 - XX:00<br />
@@ -44,13 +66,14 @@ import { MatSelectChange } from '@angular/material/select';
       {{ cronEvery.Hour ? 'Every Hour' : 'Particular Hour' }}</mat-slide-toggle
     >
     <div *ngIf="!EveryHour()">
+      <mat-form-field>
       <input
         matInput
         (keyup.enter)="updateHour($event.target.value)"
         (blur)="updateHour($event.target.value)"
         value="{{ cron.Hour }}"
         placeholder="Hour range or target"
-      />
+      /></mat-form-field>
       {{ hourMessage }}
       <p>
         <b>Example</b><br />
@@ -66,6 +89,7 @@ import { MatSelectChange } from '@angular/material/select';
       }}</mat-slide-toggle
     >
     <div *ngIf="!EveryDom()">
+      <mat-form-field>
       <input
         matInput
         (keyup.enter)="updateDom($event.target.value)"
@@ -73,6 +97,7 @@ import { MatSelectChange } from '@angular/material/select';
         value="{{ cron.Dom }}"
         placeholder="Month day range or target"
       />
+      </mat-form-field>
       {{ domMessage }}
       <p>
         <b>Example</b><br />
@@ -133,12 +158,12 @@ import { MatSelectChange } from '@angular/material/select';
     {{ cron | json }}
     <br />cronEvery:<br />
   `,
-  /* 
+  /*
   Minute Period + Work from minute X to Y [ ] every Z minute Hour Period +
     Work from hour X to Y [ ] every Z hour Work every day of month | work in
     3,8,9 Work every month | work in JAN, FEB Work every week day | work in SUN,
     MON, FRI
-    
+
     {{cronEvery | json}}
   <br>dowVal:<br>
     {{dowVal | json}}
@@ -163,6 +188,7 @@ export class CronComponent implements OnInit, AfterViewInit {
   dowVal = new FormControl();
   monthVal = new FormControl();
 
+  secondMessage = '';
   minuteMessage = '';
   hourMessage = '';
   domMessage = '';
@@ -330,6 +356,13 @@ export class CronComponent implements OnInit, AfterViewInit {
     console.log(this.cron);
   }
 
+  updateSecond(sec: string) {
+    if (sec) {
+      this.cron.Second = sec;
+    }
+    this.emitCron();
+  }
+
   updateMinute(min: string) {
     if (min) {
       this.cron.Minute = min;
@@ -370,7 +403,7 @@ export class CronComponent implements OnInit, AfterViewInit {
   }
 
   /* limiter(inStr: string, min: number, max: number): Boolean {
-    
+
     // let reg = /(?:\d{3}|\(\d{3}\))([-\/\.])\d{3}\1\d{4}/
     let reg = /(\d+,)+\d+|(\d+(\/|-)\d+)|\d+|\*|\?/
     console.log("1");
@@ -383,7 +416,7 @@ export class CronComponent implements OnInit, AfterViewInit {
     console.log(reg.exec("*"));
     console.log("?");
     console.log(reg.exec("?"));
-    
+
     if (!inStr.match(reg)) {
       return false;
     } else if (inStr.includes(',') && inStr.includes('/') && inStr.includes('-')) {
@@ -393,7 +426,7 @@ export class CronComponent implements OnInit, AfterViewInit {
     } else if (inStr.includes('-') && inStr.includes(',')) {
       return false;
     } else {
-      
+
     }
     return false;
   } */

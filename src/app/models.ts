@@ -1,16 +1,17 @@
 
 export interface Device {
   Id?: string;
-  
+
   /* Device Id  */
   DeviceId?: string;
   Name?: string;
   Desc?: string;
-  
+
   Pin?: number;
-  
+  GPIO?: number;
+
   Status?: number;
-  
+
 
   /* Pin type
     GPIO = 0, default
@@ -18,37 +19,37 @@ export interface Device {
   */
   PinType?: number;
 
-  /* Pin mode 
+  /* Pin mode
     Input = 0, default
     Output = 1
   */
   PinMode?: number;
 
-  /* Active status 
+  /* Active status
   Active?: boolean;*/
 
   /* Factor identifier */
   Factor?: string;
-  
+
   FactorManipulator?: string;
-  
+
   /* Unit of measurement */
   Unit?: string;
-  
+
   /* Current active status for actuator device, output mode
   and also boolean state of sensor device, input mode */
   BoolState?: boolean;
-  
+
   /* latest values attached to device_id */
   Value1?: number;
   Value2?: number;
   Value3?: number;
-  
+
 }
 
 export interface Plant {
   Id: string;
-  
+
 }
 
 export interface Field {
@@ -56,12 +57,12 @@ export interface Field {
 }
 
 export interface DeviceInfo {
-  DeviceId: string;  
-  Name: string;  
-  
+  DeviceId: string;
+  Name: string;
+
   PinType: number;
   PinMode: number;
-  
+
   ControlScheme?: number;
 }
 
@@ -72,7 +73,6 @@ export const DEVICE_LIST: Array<DeviceInfo> = [
     PinMode: 1,
     PinType: 0,
     ControlScheme: 0,
-    
   },
   {
     DeviceId: 'humi-temp-sensor',
@@ -89,7 +89,7 @@ export const DEVICE_LIST: Array<DeviceInfo> = [
     ControlScheme: 0,
   }
 ];
-  
+
 /* To set auto setting working with devices */
 export interface Controller {
   Id?: number;
@@ -104,7 +104,7 @@ export interface Controller {
   Policy?: number;
 
   Factors?: number[];
-  
+
   ControlScheme?: number;
 
   // TIME_POLICY + TIME_MEASUREMENT_POLICY
@@ -153,23 +153,23 @@ export const DEVICE_ERROR = 2;
 
 
 export const CONTROLLING_FACTORS = [
-  { 
+  {
     name: "Ground Humidity",
     value: 1
   },
-  { 
+  {
     name: "Ground Temperature",
     value: 2
   },
-  { 
+  {
     name: "Air Humidity",
     value: 3
   },
-  { 
+  {
     name: "Air Temperature",
     value: 3
   },
-  
+
 ];
 
 export const TIME_POLICY = 0;
@@ -190,7 +190,7 @@ export const CONTROL_POLICIES = [
            value: TIME_MEASUREMENT_POLICY
          }
        ];
-       
+
 export const VALUE_CONTROL = 0;
 export const BOOLEAN_CONTROL = 1;
 
@@ -206,9 +206,13 @@ export const SCHEMES = [
            desc: 'Workign with boolean value, true and false.'
          }
        ];
-       
+
+// Pin Type
 export const PIN_GPIO = 0;
 export const PIN_GROUND = 1;
+export const PIN_POWER3v3 = 2;
+export const PIN_POWER5v = 3;
 
-export const PIN_INPUT = 0;
-export const PIN_OUTPUT = 1;
+// Pin Mode
+export const PIN_MODE_INPUT = 0;
+export const PIN_MODE_OUTPUT = 1;

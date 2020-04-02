@@ -27,7 +27,7 @@ export class ControllerComponent implements OnInit, AfterContentInit {
   // sensor devices(pin)
 
   /* sensors = this.naasSv.deviceArray.filter((device) => {
-    device.PinType !== models.PIN_GROUND && device.PinMode === models.PIN_INPUT;
+    device.PinType !== models.PIN_GROUND && device.PinMode === models.PIN_MODE_INPUT;
   }); */
   sensors = this.naasSv.sensors;
 
@@ -59,8 +59,7 @@ export class ControllerComponent implements OnInit, AfterContentInit {
 
   ngAfterContentInit() {
     if (this.ctl) {
-      this.controlPolicyFc.setValue(this.ctl.ControlScheme);
-      this.schemeFc.setValue(this.ctl.ControlScheme);
+      this.controlPolicyFc.setValue(this.ctl.Policy);
       this.schemeFc.setValue(this.ctl.ControlScheme);
 
       if (this.ctl.Sensors) {
@@ -69,9 +68,6 @@ export class ControllerComponent implements OnInit, AfterContentInit {
       if (this.ctl.Factors) {
         this.controllingFactorFc.setValue(this.ctl.Factors);
       }
-      if (this.ctl.Sensors) {
-        this.sensorsFc.setValue(this.ctl.Sensors);
-      }
       if (this.ctl.IncreasingDevices) {
         this.increasingDevicesFc.setValue(this.ctl.IncreasingDevices);
       }
@@ -79,7 +75,7 @@ export class ControllerComponent implements OnInit, AfterContentInit {
         this.decreasingDevicesFc.setValue(this.ctl.DecreasingDevices);
       }
       if (this.ctl.BoolTrueDevices) {
-        this.trueDevicesFc.setValue(this.ctl.IncreasingDevices);
+        this.trueDevicesFc.setValue(this.ctl.BoolTrueDevices);
       }
       if (this.ctl.BoolFalseDevices) {
         this.falseDevicesFc.setValue(this.ctl.BoolFalseDevices);
@@ -87,7 +83,7 @@ export class ControllerComponent implements OnInit, AfterContentInit {
     }
   }
 
-  toggleActive(i: number) {
+  toggleActive() {
     if (this.ctl.Active) {
       this.ctl.Active = false;
     } else {
@@ -122,31 +118,31 @@ export class ControllerComponent implements OnInit, AfterContentInit {
 
   updatePolicy(change: number) {
     if (change !== null && this.ctl) {
-      this.ctl.Policy = change;
+      this.ctl.Policy = +change;
     }
   }
 
   updateScheme(change: number) {
     if (change !== null && this.ctl) {
-      this.ctl.ControlScheme = change;
+      this.ctl.ControlScheme = +change;
     }
   }
 
   updateOptimalVal(change: number) {
     if (change && this.ctl) {
-      this.ctl.OptimalVal = change;
+      this.ctl.OptimalVal = +change;
     }
   }
 
   updateMinVal(change: number) {
     if (change && this.ctl) {
-      this.ctl.PreferredMin = change;
+      this.ctl.PreferredMin = +change;
     }
   }
 
   updateMaxVal(change: number) {
     if (change && this.ctl) {
-      this.ctl.PreferredMax = change;
+      this.ctl.PreferredMax = +change;
     }
   }
 

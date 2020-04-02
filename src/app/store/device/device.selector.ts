@@ -4,7 +4,7 @@ import {
   ActionReducerMap,
 } from '@ngrx/store';
 import * as fromDevice from './device.reducer';
-import { PIN_GROUND, PIN_INPUT, PIN_OUTPUT } from '../../models';
+import { PIN_GROUND, PIN_MODE_INPUT, PIN_MODE_OUTPUT } from '../../models';
 
 export interface State {
   devices: fromDevice.State;
@@ -50,17 +50,17 @@ export const selectSensors = createSelector(
   (_, devices) => {
     devices.filter((device) => {
       console.log("filer sensor");
-      (device.PinType !== PIN_GROUND && device.PinMode == PIN_INPUT)
+      (device.PinType !== PIN_GROUND && device.PinMode == PIN_MODE_INPUT)
     });
   });
-  
+
   export const selectActuators = createSelector(
     selectDeviceState,
     fromDevice.selectAllDevices,
         //  selectAllDevices,
-         (_, devices) => { 
+         (_, devices) => {
            devices.filter((device) => {
-            (device.PinType !== PIN_GROUND && device.PinMode == PIN_OUTPUT)
+            (device.PinType !== PIN_GROUND && device.PinMode == PIN_MODE_OUTPUT)
            });
          }
        );

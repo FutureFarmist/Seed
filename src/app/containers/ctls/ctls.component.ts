@@ -105,8 +105,6 @@ export class CtlsComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   deleteController(id) {
-    if (id) {
-      this.naasSv.deleteController(id);
-    }
+    this.naasSv.deleteController(id);
   }
 }
