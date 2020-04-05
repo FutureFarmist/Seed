@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { SensorValue } from 'src/app/models';
+import { NaasService } from 'src/app/services/naas.service';
 
 @Component({
   selector: 'sensor-values',
@@ -26,7 +27,11 @@ import { SensorValue } from 'src/app/models';
 })
 export class SensorValuesComponent implements OnInit {
   @Input() SensorValues: SensorValue;
-  constructor() { }
+  // TODO: adding unit to value
+  // unit = "";
+  constructor(private naasSv: NaasService) { 
+    // this.naasSv.getDeviceInfo(this.SensorValues.Device_id).
+  }
 
   ngOnInit(): void {
   }

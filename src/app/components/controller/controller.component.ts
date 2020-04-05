@@ -86,20 +86,25 @@ export class ControllerComponent implements OnInit, AfterContentInit {
   
   getFactors() {
     if(this.contlr && this.contlr.Sensor) {
+      console.log("getFactors");
       var info = this.naasSv.getDeviceInfo(this.contlr.Sensor);
       var all_factors = [];
       if (info && info.Factors) {
+        console.log("f1");
         all_factors = info.Factors.split(',');
       }
-      if (all_factors.length) {
+      if (all_factors.length > 0) {
+        console.log("f2");
         this.available_factors = this.controllingFactors.filter(val => {
           for (let info of all_factors) {
             if (val.value == (+info)) {
+              console.log("f3");
               return true;
             } 
           }
         });
       } else {
+        console.log("f4");
         this.available_factors = [];
       }
     }

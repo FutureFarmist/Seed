@@ -10,7 +10,7 @@ import * as deviceSelector from "../store/device/device.selector";
 import * as controllerSelector from "../store/controller/controller.selector";
 import * as controllerAction from "../store/controller/controller.action";
 import * as plantSelector from "../store/plant/plant.selector";
-import { Subscription } from 'rxjs';
+import { Subscription, BehaviorSubject } from 'rxjs';
 import { Update, EntityMap, Dictionary } from '@ngrx/entity';
 // import { UpdateStr, UpdateNum } from '@ngrx/entity';
 import * as deviceActions from '../store/device/device.action';
@@ -82,6 +82,7 @@ export class NaasService implements OnInit {
   });
 
   device_info: Array<DeviceInfo> = [];
+  device_info$: BehaviorSubject<Array<DeviceInfo>> = new BehaviorSubject<Array<DeviceInfo>>([]);
   sensor_values: Array<SensorValue> = [];
 
   fieldArray: Array<Field>;
@@ -141,7 +142,7 @@ export class NaasService implements OnInit {
   readDeviceInfo(): Observable<Array<DeviceInfo>> {
     console.log('readDeviceInfo');
     return this.http.post<Array<DeviceInfo>>(
-      this.devicePrefix + 'device-info',
+      this.devicePrefix + 'info',
       {},
       this.httpOptions
     );
@@ -159,7 +160,7 @@ export class NaasService implements OnInit {
   readDeviceValue(): Observable<Array<SensorValue>> {
     console.log('readDeviceValue');
     return this.http.post<Array<SensorValue>>(
-      this.devicePrefix + 'device-value',
+      this.devicePrefix + 'values',
       {},
       this.httpOptions
     );
@@ -197,6 +198,7 @@ export class NaasService implements OnInit {
         this.device_info = devices_info;
         console.log("device_info");
         console.log(devices_info);
+        this.device_info$.next(this.device_info);
       }
     });
   }

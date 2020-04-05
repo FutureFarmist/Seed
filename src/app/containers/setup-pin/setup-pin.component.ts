@@ -34,7 +34,7 @@ import { MatSelectChange } from '@angular/material/select';
               [value]="pin.DeviceId"
             >
               <mat-option
-                *ngFor="let device of devices_info"
+                *ngFor="let device of device_info"
                 [value]="device.DeviceId"
               >
                 {{ device.Name }}
@@ -53,7 +53,10 @@ export class SetupPinComponent implements OnInit, AfterContentInit {
   pinsState$: BehaviorSubject<Array<Device>> = new BehaviorSubject<
     Array<Device>
   >([]);
-  devices_info = DEVICE_INFO;
+  device_info = [];
+  device_info$ = this.naasSv.device_info$.subscribe((devices_info) => {
+    this.device_info = devices_info;
+  });
   devices$$: Subscription;
   PIN_GROUND = PIN_GROUND;
   PIN_GPIO = PIN_GPIO;
@@ -61,6 +64,8 @@ export class SetupPinComponent implements OnInit, AfterContentInit {
   PIN_POWER5v = PIN_POWER5v;
   constructor(private naasSv: NaasService) {}
   ngOnInit(): void {
+    // this.devices_info = this.naasSv.device_info;
+    console.log("setupPinInit");
     this.pins = [
       {
         Id: '1',
@@ -516,7 +521,7 @@ export class SetupPinComponent implements OnInit, AfterContentInit {
         .filter(value => value.Pin == pinNo)
         .forEach(value => {
           value.DeviceId = matSelect;
-          for (let device of this.devices_info) {
+          for (let device of this.device_info) {
             if (device.DeviceId === matSelect) {
               console.log('found ' + device.DeviceId);
               value.PinMode = device.PinMode;
