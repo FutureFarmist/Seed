@@ -47,6 +47,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CronComponent } from './containers/cron/cron.component';
 import { RangeComponent } from './components/range/range.component';
 import { ControllerComponent } from './components/controller/controller.component';
+import { SensorValuesComponent } from './components/sensor-values/sensor-values.component';
 // import * as fromApp from './+state/app.reducer';
 // import { AppEffects } from './+state/app.effects';
 // import { AppFacade } from './+state/app.facade';
@@ -65,7 +66,8 @@ import { ControllerComponent } from './components/controller/controller.componen
     CtlsComponent,
     CronComponent,
     RangeComponent,
-    ControllerComponent
+    ControllerComponent,
+    SensorValuesComponent
   ],
   imports: [
     BrowserModule,

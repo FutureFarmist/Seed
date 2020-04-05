@@ -1,6 +1,6 @@
 import {
   Component,
-  OnInit
+  OnInit,
 } from '@angular/core';
 import {
   BehaviorSubject,
@@ -14,31 +14,34 @@ import {
   MatSlideToggleChange
 } from '@angular/material/slide-toggle';
 import {
-  Device, DEVICE_LIST
+  Device, DEVICE_INFO, CONTROLLING_FACTORS, DeviceInfo, ResponseResult
 } from '../../models';
+
+// TODO: update status of actuator for realtime status of control
+// this would be automator safety
 
 @Component({
   selector: 'pins',
   template: `
-    <button (click)="readDevices()" matInput>read devices</button>
+    <button (click)="callDeviceValues()" matInput>Read values</button>
     <mat-grid-list cols="5" rowHeight="200px">
-      <mat-grid-tile *ngFor="let pin of devicesState$ | async">
+      <mat-grid-tile *ngFor="let device of devices">
         <mat-card class="card">
           <mat-card-header>
             <div mat-card-avatar class="header-image"></div>
             <mat-card-title>{{
-              pin.Name ? pin.Name : 'PIN ' + pin.Pin
+              device.Name ? device.Name : 'PIN ' + device.Pin
             }}</mat-card-title>
-            <mat-card-subtitle>{{getDeviceName(pin.DeviceId)}}</mat-card-subtitle>
+            <mat-card-subtitle>{{getDeviceName(device.DeviceId)}}</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
-            content
+            <sensor-values [SensorValues]="device.SensorValues"></sensor-values>
           </mat-card-content>
           <mat-card-actions>
             <mat-slide-toggle
-              *ngIf="pin.PinMode == 1"
-              (change)="togglePin(pin.Pin)"
-              [checked]="pin.OutputActive"
+              *ngIf="device.PinMode == 1"
+              (change)="togglePin(device.Pin)"
+              [checked]="device.BoolState"
               >Output</mat-slide-toggle
             >
           </mat-card-actions>
@@ -54,22 +57,36 @@ export class PinsComponent implements OnInit {
     Array<Device>
   >([]);
   devices$$: Subscription;
-  deviceList = DEVICE_LIST;
+  deviceList = DEVICE_INFO;
+
+  FACTORS = CONTROLLING_FACTORS;
   constructor(private naasSv: NaasService) {}
 
   ngOnInit() {
     // this.devices = [];
     // this.devicesState$.next(this.devices);
     console.log('pin');
-
-    this.devices$$ = this.naasSv.readDevices().subscribe(r_devices => {
-      // let deviceList = JSON.parse(r_devices);
-      this.devices = JSON.parse(r_devices);
-      this.naasSv.upsertDevices(this.devices);
-      this.devicesState$.next(this.devices.filter(val => val.Name));
+    this.devices$$ = this.naasSv.deviceArray$.subscribe((r_devices: Device[]) => {
+      console.log("update devices on pins");
+      console.log(r_devices);
+      this.devices = JSON.parse(JSON.stringify(r_devices)).filter(this._filterName);
+      this.updateDevices();
     });
+    
+    this.naasSv.callDeviceInfo();
+    this.naasSv.callDevice();
+    this.naasSv.callDeviceValues();
+    
   }
-  readDevices() {}
+  
+  _filterName(val) {
+    return val.Name;
+  }
+  
+  callDeviceValues() {
+    this.naasSv.callDeviceValues()
+  }
+
   togglePin(pinNo: number) {
     console.log('togglePin');
     console.log(pinNo);
@@ -81,9 +98,9 @@ export class PinsComponent implements OnInit {
           console.log('pin = pinNO');
           if (pin.BoolState) {
             console.log('pinOff');
-            this.naasSv.pinOff(pin.Pin).subscribe((result: string) => {
+            this.naasSv.pinOff(pin.Pin).subscribe((result: ResponseResult) => {
               pin.BoolState = false;
-              this.emitDevices(this.devices);
+              this.updateDevices();
               console.log('pinOff result:', result);
             });
             
@@ -91,9 +108,9 @@ export class PinsComponent implements OnInit {
             break;
           } else {
             console.log('pinOn');
-            this.naasSv.pinOn(pin.Pin).subscribe((result: string) => {
+            this.naasSv.pinOn(pin.Pin).subscribe((result: ResponseResult) => {
               pin.BoolState = true;
-              this.emitDevices(this.devices);
+              this.updateDevices();
               console.log('pinOn result:', result);
             });
             // this.naasSv.pinOn(pin.Pin).subscribe(this.handleDevicesState);
@@ -104,10 +121,13 @@ export class PinsComponent implements OnInit {
     }
   }
 
-  emitDevices(devices: Device[]) {
-    this.devicesState$.next(devices);
+  updateDevices() {
+    if (this.devices && this.devices.length) {
+      console.log("updateDevices");
+      this.devicesState$.next(this.devices.filter(val => val.Name));
+    }
   }
-
+  
   handleDevicesState(devicesState: string) {
     if (devicesState) {
       console.log('handledevicesState');
@@ -115,7 +135,7 @@ export class PinsComponent implements OnInit {
       let devices: Device[] = [];
 
       // push to devicesState$
-      this.emitDevices(devices);
+      this.updateDevices();
     }
   }
 

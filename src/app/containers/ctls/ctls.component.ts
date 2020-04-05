@@ -22,16 +22,16 @@ import { FormControl } from '@angular/forms';
         </mat-panel-description>
       </mat-expansion-panel-header>
 
-      <controller [(ctl)]="ctl"></controller>
+      <controller [(contlr)]="ctls[i]"></controller>
       <button mat-button (click)="deleteController(ctl.Id)">Delete</button>
     </mat-expansion-panel>
     <mat-accordion> </mat-accordion>
   </mat-accordion>
   <br /><br />
   <button mat-raised-button (click)="updateControllers()">Save</button>
-  <pre>{{ ctls | json }}</pre>
   <br /><br />
   `,
+  // <pre>{{ ctls | json }}</pre>
   // <pre>{{ this.naasSv.controllerArray | json }}</pre>
   // <cron *ngIf="testCron" [(cron)]="testCron"></cron>
   // templateUrl: './ctls.component.html',

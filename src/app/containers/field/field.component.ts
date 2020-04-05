@@ -35,7 +35,7 @@ export class FieldComponent implements OnInit {
 
   fields: Observable<Field[]> = of([]);
   // fields: Observable<Field[]> = this.naas.getFields();
-  devices: Observable<Device[]> = this.naas.readDevices();
+  // devices: Observable<Device[]> = this.naas.readDevices();
   plants: Observable<Plant[]>;
 
   /* fieldArray: Dictionary<IFile>;

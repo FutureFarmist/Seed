@@ -3,6 +3,7 @@ export interface Device {
   Id?: string;
 
   /* Device Id  */
+  // it's good to be noted that this DeviceId should be DeviceInfoId instead of just DeviceId which would be confused with Id
   DeviceId?: string;
   Name?: string;
   Desc?: string;
@@ -29,7 +30,7 @@ export interface Device {
   Active?: boolean;*/
 
   /* Factor identifier */
-  Factor?: string;
+  Factor?: number;
 
   FactorManipulator?: string;
 
@@ -44,6 +45,9 @@ export interface Device {
   Value1?: number;
   Value2?: number;
   Value3?: number;
+  
+  // only for seed
+  SensorValues?: Array<SensorValue>;
 
 }
 
@@ -53,7 +57,8 @@ export interface Plant {
 }
 
 export interface Field {
-  Id: string;
+  Id?: string;
+  Name?: string;
 }
 
 export interface DeviceInfo {
@@ -64,9 +69,12 @@ export interface DeviceInfo {
   PinMode: number;
 
   ControlScheme?: number;
+  
+  // for spliting into factor1,factor2,...
+  Factors?: string;
 }
 
-export const DEVICE_LIST: Array<DeviceInfo> = [
+export const DEVICE_INFO: Array<DeviceInfo> = [
   {
     DeviceId: 'relay-pin',
     Name: 'Relay Pin',
@@ -75,8 +83,8 @@ export const DEVICE_LIST: Array<DeviceInfo> = [
     ControlScheme: 0,
   },
   {
-    DeviceId: 'humi-temp-sensor',
-    Name: 'Humi-temp sensor',
+    DeviceId: 'dht11',
+    Name: 'DHT11 - Humidity, Temperature',
     PinMode: 0,
     PinType: 0,
     ControlScheme: 0,
@@ -98,12 +106,12 @@ export interface Controller {
 
   Active?: Boolean;
 
-  Sensors?: string[];
+  Sensor?: string;
   // DeviceLinks?: Array<DeviceLink>;
 
   Policy?: number;
 
-  Factors?: number[];
+  Factor?: number;
 
   ControlScheme?: number;
 
@@ -147,6 +155,13 @@ export interface Cron {
   Year?: string;
 }
 
+export interface SensorValue {
+  Device_id?: string;
+	Factor?:	number;
+	Value?:	number;
+	Boolean?: string;
+}
+
 export const DEVICE_INACTIVE = 0;
 export const DEVICE_ACTIVE = 1;
 export const DEVICE_ERROR = 2;
@@ -154,11 +169,11 @@ export const DEVICE_ERROR = 2;
 
 export const CONTROLLING_FACTORS = [
   {
-    name: "Ground Humidity",
+    name: "Soil Humidity",
     value: 1
   },
   {
-    name: "Ground Temperature",
+    name: "Soil Temperature",
     value: 2
   },
   {
@@ -167,7 +182,7 @@ export const CONTROLLING_FACTORS = [
   },
   {
     name: "Air Temperature",
-    value: 3
+    value: 4
   },
 
 ];
@@ -216,3 +231,9 @@ export const PIN_POWER5v = 3;
 // Pin Mode
 export const PIN_MODE_INPUT = 0;
 export const PIN_MODE_OUTPUT = 1;
+
+export interface ResponseResult {
+  Success?: boolean;
+  Error?: string;
+  ErrorCode?: number;
+}

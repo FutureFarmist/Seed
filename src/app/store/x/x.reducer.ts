@@ -7,7 +7,7 @@ export interface State extends EntityState<Device> {
   // additional entities state properties
   // selectedDeviceId: number | null;
 }
-export function selectDeviceId(device: Device): string {
+export function selectXId(device: Device): string {
   //In this case this would be optional since primary key is id
   return device.Id;
 };
@@ -16,7 +16,7 @@ export function sortByName(a: Device, b: Device): number {
   // return a.Id - b.Id; // for number
 }
 export const adapter: EntityAdapter<Device> = createEntityAdapter<Device>({
-  selectId: selectDeviceId,
+  selectId: selectXId,
   sortComparer: sortByName
 });
 

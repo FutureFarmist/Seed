@@ -9,8 +9,8 @@ import { NaasService } from '../../services/naas.service';
   styleUrls: ['./controller.component.scss']
 })
 export class ControllerComponent implements OnInit, AfterContentInit {
-  @Input() ctl: models.Controller;
-  @Output() ctlChange = new EventEmitter<models.Controller>();
+  @Input() contlr: models.Controller;
+  @Output() contlrChange = new EventEmitter<models.Controller>();
   constructor(private naasSv: NaasService) {}
 
   controllingFactors = models.CONTROLLING_FACTORS;
@@ -34,6 +34,7 @@ export class ControllerComponent implements OnInit, AfterContentInit {
   // control devices(pin)
   actuators = this.naasSv.actuators;
 
+  available_factors = [];
   /* decreasingDevices = [];
   increasingDevices = [];
 
@@ -49,7 +50,7 @@ export class ControllerComponent implements OnInit, AfterContentInit {
   trueDevicesFc = new FormControl();
   falseDevicesFc = new FormControl();
 
-  sensorsTx = 'Sensors';
+  sensorsTx = 'Sensor';
   // trueDevicesTx = this.getTrueDeviceTx();
   falseDevicesTx = 'Device Working at False State';
   increasingDevicesTx = 'Device Working to Increase Value';
@@ -58,123 +59,149 @@ export class ControllerComponent implements OnInit, AfterContentInit {
   ngOnInit(): void {}
 
   ngAfterContentInit() {
-    if (this.ctl) {
-      this.controlPolicyFc.setValue(this.ctl.Policy);
-      this.schemeFc.setValue(this.ctl.ControlScheme);
+    if (this.contlr) {
+      this.controlPolicyFc.setValue(this.contlr.Policy);
+      this.schemeFc.setValue(this.contlr.ControlScheme);
 
-      if (this.ctl.Sensors) {
-        this.sensorsFc.setValue(this.ctl.Sensors);
+      if (this.contlr.Sensor) {
+        this.sensorsFc.setValue(this.contlr.Sensor);
       }
-      if (this.ctl.Factors) {
-        this.controllingFactorFc.setValue(this.ctl.Factors);
+      if (this.contlr.Factor) {
+        this.controllingFactorFc.setValue(this.contlr.Factor);
       }
-      if (this.ctl.IncreasingDevices) {
-        this.increasingDevicesFc.setValue(this.ctl.IncreasingDevices);
+      if (this.contlr.IncreasingDevices) {
+        this.increasingDevicesFc.setValue(this.contlr.IncreasingDevices);
       }
-      if (this.ctl.DecreasingDevices) {
-        this.decreasingDevicesFc.setValue(this.ctl.DecreasingDevices);
+      if (this.contlr.DecreasingDevices) {
+        this.decreasingDevicesFc.setValue(this.contlr.DecreasingDevices);
       }
-      if (this.ctl.BoolTrueDevices) {
-        this.trueDevicesFc.setValue(this.ctl.BoolTrueDevices);
+      if (this.contlr.BoolTrueDevices) {
+        this.trueDevicesFc.setValue(this.contlr.BoolTrueDevices);
       }
-      if (this.ctl.BoolFalseDevices) {
-        this.falseDevicesFc.setValue(this.ctl.BoolFalseDevices);
+      if (this.contlr.BoolFalseDevices) {
+        this.falseDevicesFc.setValue(this.contlr.BoolFalseDevices);
+      }
+    }
+  }
+  
+  getFactors() {
+    if(this.contlr && this.contlr.Sensor) {
+      var info = this.naasSv.getDeviceInfo(this.contlr.Sensor);
+      var all_factors = [];
+      if (info && info.Factors) {
+        all_factors = info.Factors.split(',');
+      }
+      if (all_factors.length) {
+        this.available_factors = this.controllingFactors.filter(val => {
+          for (let info of all_factors) {
+            if (val.value == (+info)) {
+              return true;
+            } 
+          }
+        });
+      } else {
+        this.available_factors = [];
       }
     }
   }
 
   toggleActive() {
-    if (this.ctl.Active) {
-      this.ctl.Active = false;
+    if (this.contlr.Active) {
+      this.contlr.Active = false;
     } else {
-      this.ctl.Active = true;
+      this.contlr.Active = true;
     }
   }
 
   updateName(change: string) {
-    if (change && this.ctl) {
-      this.ctl.Name = change;
+    if (change && this.contlr) {
+      this.contlr.Name = change;
     }
   }
 
   updateDesc(change: string) {
-    if (change && this.ctl) {
-      this.ctl.Desc = change;
+    if (change && this.contlr) {
+      this.contlr.Desc = change;
     }
   }
 
-  updateSensors(change: Array<string>) {
-    if (change && this.ctl) {
-      this.ctl.Sensors = change;
-      // this.ctl.Sensors = change.join(',');
+  updateSensor(change: string) {
+    if (change && this.contlr) {
+      this.contlr.Sensor = change;
+      // this.contlr.Sensor = change.join(',');
+      this.getFactors();
     }
   }
 
-  updateControllingFactor(change: number[]) {
-    if (change && this.ctl) {
-      this.ctl.Factors = change;
+  updateControllingFactor(change: number) {
+    if (change && this.contlr) {
+      this.contlr.Factor = change;
+      // var device_info = this.naasSv.getDeviceInfo(this.contlr.Sensor);
+      // this should update control scheme automatically due to it knows what's is the factor to be control
+      // but lastly, it's depend on device that determines scheme of sensor even the same factor
+      // this.updateScheme()
     }
   }
 
   updatePolicy(change: number) {
-    if (change !== null && this.ctl) {
-      this.ctl.Policy = +change;
+    if (change !== null && this.contlr) {
+      this.contlr.Policy = +change;
     }
   }
 
   updateScheme(change: number) {
-    if (change !== null && this.ctl) {
-      this.ctl.ControlScheme = +change;
+    if (change !== null && this.contlr) {
+      this.contlr.ControlScheme = +change;
     }
   }
 
   updateOptimalVal(change: number) {
-    if (change && this.ctl) {
-      this.ctl.OptimalVal = +change;
+    if (change && this.contlr) {
+      this.contlr.OptimalVal = +change;
     }
   }
 
   updateMinVal(change: number) {
-    if (change && this.ctl) {
-      this.ctl.PreferredMin = +change;
+    if (change && this.contlr) {
+      this.contlr.PreferredMin = +change;
     }
   }
 
   updateMaxVal(change: number) {
-    if (change && this.ctl) {
-      this.ctl.PreferredMax = +change;
+    if (change && this.contlr) {
+      this.contlr.PreferredMax = +change;
     }
   }
 
   updateIncreasingDevice(change: Array<string>) {
-    if (change && this.ctl) {
-      this.ctl.IncreasingDevices = change;
+    if (change && this.contlr) {
+      this.contlr.IncreasingDevices = change;
     }
   }
 
   updateDecreasingDevice(change: Array<string>) {
-    if (change && this.ctl) {
-      this.ctl.DecreasingDevices = change;
+    if (change && this.contlr) {
+      this.contlr.DecreasingDevices = change;
     }
   }
 
   updateTrueDevice(change: Array<string>) {
-    if (change && this.ctl) {
-      this.ctl.BoolTrueDevices = change;
+    if (change && this.contlr) {
+      this.contlr.BoolTrueDevices = change;
     }
   }
 
   updateFalseDevice(change: Array<string>) {
-    if (change && this.ctl) {
-      this.ctl.BoolFalseDevices = change;
+    if (change && this.contlr) {
+      this.contlr.BoolFalseDevices = change;
     }
   }
 
   getTrueDeviceTx(): string {
-    if (this.ctl && this.ctl.Policy === this.TIME_POLICY) {
+    if (this.contlr && this.contlr.Policy === this.TIME_POLICY) {
       return 'Working Device';
     } else {
-      // this.ctl.ControlScheme) === this.BOOLEAN_CONTROL
+      // this.contlr.ControlScheme) === this.BOOLEAN_CONTROL
       return 'Device Working at True State';
     }
   }

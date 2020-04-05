@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Device, DEVICE_LIST, PIN_GROUND } from '../../models';
+import { Component, OnInit, AfterContentInit } from '@angular/core';
+import { Device, DEVICE_INFO, PIN_GROUND, PIN_GPIO, PIN_POWER3v3, PIN_POWER5v } from '../../models';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { NaasService } from '../../services/naas.service';
 import { MatSelectChange } from '@angular/material/select';
@@ -15,7 +15,7 @@ import { MatSelectChange } from '@angular/material/select';
         <td>PIN {{ pin.Pin }}</td>
         <td>
           <input
-            *ngIf="!pin.PinType"
+            *ngIf="pin.PinType == PIN_GPIO"
             (keyup.enter)="updateName(pin.Pin, $event.target.value)"
             (blur)="updateName(pin.Pin, $event.target.value)"
             value="{{ pin.Name }}"
@@ -23,16 +23,18 @@ import { MatSelectChange } from '@angular/material/select';
             matInput
           />
           <div *ngIf="pin.PinType == PIN_GROUND">Ground</div>
+          <div *ngIf="pin.PinType == PIN_POWER3v3">POWER 3v3</div>
+          <div *ngIf="pin.PinType == PIN_POWER5v">POWER 5v</div>
         </td>
         <td>
-          <mat-form-field *ngIf="pin.PinType != 1">
+          <mat-form-field *ngIf="pin.PinType == PIN_GPIO">
             <mat-label>Device</mat-label>
             <mat-select
               (selectionChange)="selectDevice(pin.Pin, $event.value)"
               [value]="pin.DeviceId"
             >
               <mat-option
-                *ngFor="let device of devices"
+                *ngFor="let device of devices_info"
                 [value]="device.DeviceId"
               >
                 {{ device.Name }}
@@ -46,14 +48,17 @@ import { MatSelectChange } from '@angular/material/select';
   `,
   styleUrls: ['./setup-pin.component.scss']
 })
-export class SetupPinComponent implements OnInit {
+export class SetupPinComponent implements OnInit, AfterContentInit {
   pins: Array<Device> = [];
   pinsState$: BehaviorSubject<Array<Device>> = new BehaviorSubject<
     Array<Device>
   >([]);
-  devices = DEVICE_LIST;
+  devices_info = DEVICE_INFO;
   devices$$: Subscription;
   PIN_GROUND = PIN_GROUND;
+  PIN_GPIO = PIN_GPIO;
+  PIN_POWER3v3 = PIN_POWER3v3;
+  PIN_POWER5v = PIN_POWER5v;
   constructor(private naasSv: NaasService) {}
   ngOnInit(): void {
     this.pins = [
@@ -61,8 +66,8 @@ export class SetupPinComponent implements OnInit {
         Id: '1',
         Pin: 1,
         Name: '',
-        PinType: 0,
-        PinMode: 0,
+        PinType: PIN_POWER3v3,
+        PinMode: PIN_GPIO,
         DeviceId: '',
         BoolState: false,
       },
@@ -70,7 +75,7 @@ export class SetupPinComponent implements OnInit {
         Id: '2',
         Pin: 2,
         Name: '',
-        PinType: 0,
+        PinType: PIN_POWER5v,
         PinMode: 0,
         DeviceId: '',
         BoolState: false
@@ -80,7 +85,7 @@ export class SetupPinComponent implements OnInit {
         Pin: 3,
         GPIO: 2,
         Name: '',
-        PinType: 0,
+        PinType: PIN_GPIO,
         PinMode: 0,
         DeviceId: '',
         BoolState: false
@@ -89,7 +94,7 @@ export class SetupPinComponent implements OnInit {
         Id: '4',
         Pin: 4,
         Name: '',
-        PinType: 0,
+        PinType: PIN_POWER5v,
         PinMode: 0,
         DeviceId: '',
         BoolState: false
@@ -99,7 +104,7 @@ export class SetupPinComponent implements OnInit {
         Pin: 5,
         GPIO: 3,
         Name: '',
-        PinType: 0,
+        PinType: PIN_GPIO,
         PinMode: 0,
         DeviceId: '',
         BoolState: false
@@ -118,7 +123,7 @@ export class SetupPinComponent implements OnInit {
         Pin: 7,
         GPIO: 4,
         Name: '',
-        PinType: 0,
+        PinType: PIN_GPIO,
         PinMode: 0,
         DeviceId: '',
         BoolState: false
@@ -128,7 +133,7 @@ export class SetupPinComponent implements OnInit {
         Pin: 8,
         GPIO: 14,
         Name: '',
-        PinType: 0,
+        PinType: PIN_GPIO,
         PinMode: 0,
         DeviceId: '',
         BoolState: false
@@ -147,7 +152,7 @@ export class SetupPinComponent implements OnInit {
         Pin: 10,
         GPIO: 15,
         Name: '',
-        PinType: 0,
+        PinType: PIN_GPIO,
         PinMode: 0,
         DeviceId: '',
         BoolState: false
@@ -157,7 +162,7 @@ export class SetupPinComponent implements OnInit {
         Pin: 11,
         GPIO: 17,
         Name: '',
-        PinType: 0,
+        PinType: PIN_GPIO,
         PinMode: 0,
         DeviceId: '',
         BoolState: false
@@ -167,7 +172,7 @@ export class SetupPinComponent implements OnInit {
         Pin: 12,
         GPIO: 18,
         Name: '',
-        PinType: 0,
+        PinType: PIN_GPIO,
         PinMode: 0,
         DeviceId: '',
         BoolState: false
@@ -177,7 +182,7 @@ export class SetupPinComponent implements OnInit {
         Pin: 13,
         GPIO: 27,
         Name: '',
-        PinType: 0,
+        PinType: PIN_GPIO,
         PinMode: 0,
         DeviceId: '',
         BoolState: false
@@ -196,7 +201,7 @@ export class SetupPinComponent implements OnInit {
         Pin: 15,
         GPIO: 22,
         Name: '',
-        PinType: 0,
+        PinType: PIN_GPIO,
         PinMode: 0,
         DeviceId: '',
         BoolState: false
@@ -206,7 +211,7 @@ export class SetupPinComponent implements OnInit {
         Pin: 16,
         GPIO: 23,
         Name: '',
-        PinType: 0,
+        PinType: PIN_GPIO,
         PinMode: 0,
         DeviceId: '',
         BoolState: false
@@ -215,7 +220,7 @@ export class SetupPinComponent implements OnInit {
         Id: '17',
         Pin: 17,
         Name: '',
-        PinType: 0,
+        PinType: PIN_POWER3v3,
         PinMode: 0,
         DeviceId: '',
         BoolState: false
@@ -225,7 +230,7 @@ export class SetupPinComponent implements OnInit {
         Pin: 18,
         GPIO: 24,
         Name: '',
-        PinType: 0,
+        PinType: PIN_GPIO,
         PinMode: 0,
         DeviceId: '',
         BoolState: false
@@ -235,7 +240,7 @@ export class SetupPinComponent implements OnInit {
         Pin: 19,
         GPIO: 10,
         Name: '',
-        PinType: 0,
+        PinType: PIN_GPIO,
         PinMode: 0,
         DeviceId: '',
         BoolState: false
@@ -254,7 +259,7 @@ export class SetupPinComponent implements OnInit {
         Pin: 21,
         GPIO: 9,
         Name: '',
-        PinType: 0,
+        PinType: PIN_GPIO,
         PinMode: 0,
         DeviceId: '',
         BoolState: false
@@ -264,7 +269,7 @@ export class SetupPinComponent implements OnInit {
         Pin: 22,
         GPIO: 25,
         Name: '',
-        PinType: 0,
+        PinType: PIN_GPIO,
         PinMode: 0,
         DeviceId: '',
         BoolState: false
@@ -274,7 +279,7 @@ export class SetupPinComponent implements OnInit {
         Pin: 23,
         GPIO: 11,
         Name: '',
-        PinType: 0,
+        PinType: PIN_GPIO,
         PinMode: 0,
         DeviceId: '',
         BoolState: false
@@ -284,7 +289,7 @@ export class SetupPinComponent implements OnInit {
         Pin: 24,
         GPIO: 8,
         Name: '',
-        PinType: 0,
+        PinType: PIN_GPIO,
         PinMode: 0,
         DeviceId: '',
         BoolState: false
@@ -303,7 +308,7 @@ export class SetupPinComponent implements OnInit {
         Pin: 26,
         GPIO: 7,
         Name: '',
-        PinType: 0,
+        PinType: PIN_GPIO,
         PinMode: 0,
         DeviceId: '',
         BoolState: false
@@ -313,7 +318,7 @@ export class SetupPinComponent implements OnInit {
         Pin: 27,
         GPIO: 0,
         Name: '',
-        PinType: 0,
+        PinType: PIN_GPIO,
         PinMode: 0,
         DeviceId: '',
         BoolState: false
@@ -323,7 +328,7 @@ export class SetupPinComponent implements OnInit {
         Pin: 28,
         GPIO: 1,
         Name: '',
-        PinType: 0,
+        PinType: PIN_GPIO,
         PinMode: 0,
         DeviceId: '',
         BoolState: false
@@ -333,7 +338,7 @@ export class SetupPinComponent implements OnInit {
         Pin: 29,
         GPIO: 5,
         Name: '',
-        PinType: 0,
+        PinType: PIN_GPIO,
         PinMode: 0,
         DeviceId: '',
         BoolState: false
@@ -352,7 +357,7 @@ export class SetupPinComponent implements OnInit {
         Pin: 31,
         GPIO: 6,
         Name: '',
-        PinType: 0,
+        PinType: PIN_GPIO,
         PinMode: 0,
         DeviceId: '',
         BoolState: false
@@ -362,7 +367,7 @@ export class SetupPinComponent implements OnInit {
         Pin: 32,
         GPIO: 12,
         Name: '',
-        PinType: 0,
+        PinType: PIN_GPIO,
         PinMode: 0,
         DeviceId: '',
         BoolState: false
@@ -372,7 +377,7 @@ export class SetupPinComponent implements OnInit {
         Pin: 33,
         GPIO: 13,
         Name: '',
-        PinType: 0,
+        PinType: PIN_GPIO,
         PinMode: 0,
         DeviceId: '',
         BoolState: false
@@ -391,7 +396,7 @@ export class SetupPinComponent implements OnInit {
         Pin: 35,
         GPIO: 19,
         Name: '',
-        PinType: 0,
+        PinType: PIN_GPIO,
         PinMode: 0,
         DeviceId: '',
         BoolState: false
@@ -401,7 +406,7 @@ export class SetupPinComponent implements OnInit {
         Pin: 36,
         GPIO: 16,
         Name: '',
-        PinType: 0,
+        PinType: PIN_GPIO,
         PinMode: 0,
         DeviceId: '',
         BoolState: false
@@ -411,7 +416,7 @@ export class SetupPinComponent implements OnInit {
         Pin: 37,
         GPIO: 26,
         Name: '',
-        PinType: 0,
+        PinType: PIN_GPIO,
         PinMode: 0,
         DeviceId: '',
         BoolState: false
@@ -421,7 +426,7 @@ export class SetupPinComponent implements OnInit {
         Pin: 38,
         GPIO: 20,
         Name: '',
-        PinType: 0,
+        PinType: PIN_GPIO,
         PinMode: 0,
         DeviceId: '',
         BoolState: false
@@ -440,7 +445,7 @@ export class SetupPinComponent implements OnInit {
         Pin: 40,
         GPIO: 21,
         Name: '',
-        PinType: 0,
+        PinType: PIN_GPIO,
         PinMode: 0,
         DeviceId: '',
         BoolState: false
@@ -449,21 +454,26 @@ export class SetupPinComponent implements OnInit {
 
     this.pinsState$.next(this.pins);
     console.log('pin');
-
-    this.devices$$ = this.naasSv.readDevices().subscribe(devices => {
-      let devices_list = JSON.parse(devices);
-      console.log('devices_list');
-      console.log(devices_list);
-      this.pins.forEach((pin, i, pins) => {
-        devices_list.forEach(device => {
+    
+  }
+  
+  ngAfterContentInit() {
+  this.devices$$ = this.naasSv.deviceArray$.subscribe((devices: Device[]) => {
+    this.pins.forEach((pin, i, pins) => {
+      // let newDevices: Device[] = JSON.parse(JSON.stringify(devices));
+      if (devices && devices.length) {
+        devices.forEach(device => {
           if (device && device.Name && pin.Pin == device.Pin) {
-            pins[i] = device;
+            pins[i] = JSON.parse(JSON.stringify(device));
           }
         });
-      });
-      this.pinsState$.next(this.pins);
-      console.log(this.pins);
+      }
     });
+    this.pinsState$.next(this.pins);
+    
+    console.log("this.pinsState$.next(this.pins);");
+    console.log(this.pins);
+  });
   }
 
   updateName(pin: number, name: string) {
@@ -506,7 +516,7 @@ export class SetupPinComponent implements OnInit {
         .filter(value => value.Pin == pinNo)
         .forEach(value => {
           value.DeviceId = matSelect;
-          for (let device of this.devices) {
+          for (let device of this.devices_info) {
             if (device.DeviceId === matSelect) {
               console.log('found ' + device.DeviceId);
               value.PinMode = device.PinMode;
