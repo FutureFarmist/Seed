@@ -170,8 +170,8 @@ export class NaasService implements OnInit {
     this.readDeviceList().subscribe((device_list: Device[]) => {
       console.log("readDeviceList res");
       if (device_list) {
-        console.log("device_value");
-        console.log(device_list);
+        // console.log("device_value");
+        // console.log(device_list);
         this.upsertDevices(device_list);
         this.conciliateDevices();
       }
@@ -183,10 +183,10 @@ export class NaasService implements OnInit {
     this.readDeviceValue().subscribe((sensor_vals: SensorValue[]) => {
       console.log('updateDeviceValues 1');
       if (sensor_vals) {
-        console.log('sensor_vals');
+        // console.log('sensor_vals');
         this.sensor_values = sensor_vals;
-        console.log("device_value");
-        console.log(sensor_vals);
+        // console.log("device_value");
+        // console.log(sensor_vals);
         this.conciliateDevices();
       }
     });
@@ -196,8 +196,8 @@ export class NaasService implements OnInit {
     this.readDeviceInfo().subscribe((devices_info: Array<DeviceInfo>) => {
       if (devices_info) {
         this.device_info = devices_info;
-        console.log("device_info");
-        console.log(devices_info);
+        // console.log("device_info");
+        // console.log(devices_info);
         this.device_info$.next(this.device_info);
       }
     });
@@ -209,8 +209,8 @@ export class NaasService implements OnInit {
       console.log('1');
       let devices = JSON.parse(JSON.stringify(this.deviceArray));
       for ( let device of devices ) {
+        console.log(this.sensor_values.length);
         for ( let ssVal of this.sensor_values ) {
-          console.log(ssVal);
           if (ssVal.Device_id == device.Id) {
             console.log("2");
             if (device.SensorValues) {
@@ -220,7 +220,7 @@ export class NaasService implements OnInit {
                 for (let sensorVal of device.SensorValues) {
                   if (sensorVal.Factor == ssVal.Factor) {
                     console.log("4");
-                    sensorVal = ssVal
+                    sensorVal.Value = ssVal.Value
                     updated = true;
                   }
                 }

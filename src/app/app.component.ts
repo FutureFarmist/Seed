@@ -8,11 +8,11 @@ import { Component } from '@angular/core';
     </div>
     <div>
       <mat-tab-group [ngStyle]="{ width: '100%' }" mat-align-tabs="center">
-        <mat-tab label="Controller" origin="1">
-          <ctls></ctls>
-        </mat-tab>
-        <mat-tab label="Status" origin="2">
+        <mat-tab label="Status" origin="1">
           <pins></pins>
+        </mat-tab>
+        <mat-tab label="Controller" origin="2">
+          <ctls></ctls>
         </mat-tab>
         <mat-tab label="Setup" origin="3">
           <setup-pin></setup-pin>

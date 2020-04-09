@@ -34,7 +34,7 @@ export class ControllerComponent implements OnInit, AfterContentInit {
   // control devices(pin)
   actuators = this.naasSv.actuators;
 
-  available_factors = [];
+  available_factors = this.controllingFactors;
   /* decreasingDevices = [];
   increasingDevices = [];
 
@@ -105,7 +105,7 @@ export class ControllerComponent implements OnInit, AfterContentInit {
         });
       } else {
         console.log("f4");
-        this.available_factors = [];
+        this.available_factors = this.controllingFactors;
       }
     }
   }
