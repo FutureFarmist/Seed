@@ -32,7 +32,7 @@ import {
             <mat-card-title>{{
               device.Name ? device.Name : 'PIN ' + device.Pin
             }}</mat-card-title>
-            <mat-card-subtitle>{{getDeviceName(device.DeviceId)}}</mat-card-subtitle>
+            <mat-card-subtitle>{{getDeviceInfoName(device.DeviceId)}}</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
             <sensor-values [SensorValues]="device.SensorValues"></sensor-values>
@@ -131,23 +131,22 @@ export class PinsComponent implements OnInit {
   handleDevicesState(devicesState: string) {
     if (devicesState) {
       console.log('handledevicesState');
-      let ps = JSON.parse(devicesState);
-      let devices: Device[] = [];
+      // let ps = JSON.parse(devicesState);
+      // let devices: Device[] = [];
 
       // push to devicesState$
       this.updateDevices();
     }
   }
 
-  getDeviceName(deviceId: string): string {
-    let name = this.devices.find(val => {
-      return val.DeviceId == deviceId;
+  getDeviceInfoName(deviceId: string): string {
+    const dv = this.naasSv.device_info.find(val => {
+      return val.DeviceId === deviceId;
     });
-    if (name) {
-      return name.Name;
+    if (dv) {
+      return dv.Name;
     } else {
       return 'Device';
     }
   }
-  
 }

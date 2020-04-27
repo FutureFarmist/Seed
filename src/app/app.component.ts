@@ -17,6 +17,9 @@ import { Component } from '@angular/core';
         <mat-tab label="Setup" origin="3">
           <setup-pin></setup-pin>
         </mat-tab>
+        <mat-tab label="Camera" origin="4">
+          <camera></camera>
+        </mat-tab>
       </mat-tab-group>
     </div>
   `,

@@ -20,7 +20,8 @@ import * as deviceActions from '../store/device/device.action';
 })
 export class NaasService implements OnInit {
   host = window.location.hostname;
-  prefix = 'http://' + this.host + ':3030/api/';
+  prefix = 'http://' + this.host + '/api/';
+  // tslint:disable-next-line: no-unused-expression
   fieldPrefix = this.prefix + 'field/';
   devicePrefix = this.prefix + 'device/';
   controllerPrefix = this.prefix + 'controller/';
@@ -125,7 +126,14 @@ export class NaasService implements OnInit {
     }
   ); */
 
-  constructor(private http: HttpClient, private store: Store<fromRoot.State>) {}
+  constructor(private http: HttpClient, private store: Store<fromRoot.State>) {
+    if (this.host === 'localhost') {
+      this.prefix = 'http://' + this.host + ':8080/api/';
+      this.fieldPrefix = this.prefix + 'field/';
+      this.devicePrefix = this.prefix + 'device/';
+      this.controllerPrefix = this.prefix + 'controller/';
+    }
+  }
 
   ngOnInit() {
     
